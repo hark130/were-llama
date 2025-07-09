@@ -1,7 +1,7 @@
 """Package macros."""
 
 # Standard Imports
-from typing import Final, List
+from typing import Dict, Final, List
 # Third Party Imports
 # Local Imports
 
@@ -10,7 +10,40 @@ from typing import Final, List
 ARCHIVE_URL: Final[str] = 'https://www.rockpapershotgun.com/wordle-past-answers'
 ARCHIVE_NEEDLE: Final[str] = 'All Wordle answers'  # HTML <h2> needle
 
+# INPUT MACROS
+INPUT_GREEN: Final[str] = 'g'.lower()
+INPUT_YELLOW: Final[str] = 'y'.lower()
+INPUT_SKIP: Final[str] = ' '.lower()
+INPUT_SKIP_TITLE: Final[str] = '<SPACE>'.upper()
+
 # WORD MACROS
+# Relative frequencies of the first letters of a word in English language
+# Source:
+#   https://en.wikipedia.org/wiki/Letter_frequency
+#   #Relative_frequencies_of_the_first_letters_of_a_word_in_English_language
+REL_START_FREQ: Dict[str, int] = {
+    'A'.lower(): 0.057, 'B'.lower(): 0.06, 'C'.lower(): 0.094, 'D'.lower(): 0.061,
+    'E'.lower(): 0.039, 'F'.lower(): 0.041, 'G'.lower(): 0.033, 'H'.lower(): 0.037,
+    'I'.lower(): 0.039, 'J'.lower(): 0.011, 'K'.lower(): 0.01, 'L'.lower(): 0.031,
+    'M'.lower(): 0.056, 'N'.lower(): 0.022, 'O'.lower(): 0.025, 'P'.lower(): 0.077,
+    'Q'.lower(): 0.0049, 'R'.lower(): 0.06, 'S'.lower(): 0.11, 'T'.lower(): 0.05,
+    'U'.lower(): 0.029, 'V'.lower(): 0.015, 'W'.lower(): 0.027, 'X'.lower(): 0.0005,
+    'Y'.lower(): 0.0036, 'Z'.lower(): 0.0024,
+}
+# Relative frequency of letters in the dictionary
+# Source:
+#   https://en.wikipedia.org/wiki/Letter_frequency
+#   #Relative_frequencies_of_letters_in_the_English_language
+REL_WORD_FREQ: Dict[str, int] = {
+    'A'.lower(): 0.078, 'B'.lower(): 0.02, 'C'.lower(): 0.04, 'D'.lower(): 0.038,
+    'E'.lower(): 0.11, 'F'.lower(): 0.014, 'G'.lower(): 0.03, 'H'.lower(): 0.023,
+    'I'.lower(): 0.086, 'J'.lower(): 0.0021, 'K'.lower(): 0.0097, 'L'.lower(): 0.053,
+    'M'.lower(): 0.027, 'N'.lower(): 0.072, 'O'.lower(): 0.061, 'P'.lower(): 0.028,
+    'Q'.lower(): 0.0019, 'R'.lower(): 0.073, 'S'.lower(): 0.087, 'T'.lower(): 0.067,
+    'U'.lower(): 0.033, 'V'.lower(): 0.01, 'W'.lower(): 0.0091, 'X'.lower(): 0.0027,
+    'Y'.lower(): 0.016, 'Z'.lower(): 0.0044,
+}
+
 FIVE_LETTER_WORDS: Final[List[str]] = [
     'aargh', 'abaca', 'abaci', 'aback', 'abaft', 'abase',
     'abash', 'abate', 'abbey', 'abbot', 'abeam', 'abend',
