@@ -48,12 +48,5 @@ def main() -> int:
             print(f'Bad input encountered: {repr(err)}')
             print('Try again.\n')
 
-        # print(f'FIRST:  {word_hint.first.excluded}')  # DEBUGGING
-        # print(f'SECOND: {word_hint.second.excluded}')  # DEBUGGING
-        # print(f'THIRD:  {word_hint.third.excluded}')  # DEBUGGING
-        # print(f'FOURTH: {word_hint.fourth.excluded}')  # DEBUGGING
-        # print(f'FIFTH:  {word_hint.fifth.excluded}')  # DEBUGGING
-        # break  # DEBUGGING
-
     # DONE
     return result

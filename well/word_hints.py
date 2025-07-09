@@ -110,18 +110,15 @@ class WordHints():
         for index in self._indices:
             # Does this index match a found solution?
             if self.word[index].is_solved():
-                # print(f'SOLUTION EXISTS "{self.word[index].solution}" GUESS? {guess[index]}')  # DEBUGGING
                 if guess[index] != self.word[index].solution:
                     valid = False
                     break  # This letter is solved and the guesss doesn't match
             # Is it excluded?
             elif guess[index] in self.word[index].excluded:
-                # print(f'GUESS {guess[index]} FOUND IN EXCLUSION: {self.word[index].excluded}')  # DEBUGGING
                 valid = False  # Not a valid guess
                 break
 
         # DONE
-        # print(f'WORD EXCLUSION RETURNS {valid} FOR {guess}')  # DEBUGGING
         return valid
 
     def _check_word_must_haves(self, guess: str) -> bool:
@@ -136,7 +133,6 @@ class WordHints():
                 break
 
         # DONE
-        # print(f'WORD MUST HAVES RETURNS {valid} FOR {guess}')  # DEBUGGING
         return valid
 
     def _check_word_room(self, guess: str) -> bool:
@@ -145,7 +141,6 @@ class WordHints():
         valid = True         # Prove this wrong
         curr_solutions = ''  # Solutions collated from LetterHints()
         local_guess = guess  # Local copy of guess
-        # print(f'CHECKING GUESS: {guess}')  # DEBUGGING
 
         # CHECK IT
         # Check solutions
@@ -158,12 +153,10 @@ class WordHints():
             if must_have in local_guess:
                 local_guess = local_guess.replace(must_have, '')  # Remove it from the guess
         # Check the measurements
-        # print(f'MUST HAVES: {self._must_haves}\nLOCAL GUESS: {local_guess}\nCURRENT SOLUTIONS: {curr_solutions}')  # DEBUGGING
         if (len(self._must_haves) + len(local_guess) + len(curr_solutions)) > 5:
             valid = False  # There's just no room
 
         # DONE
-        # print(f'WORD ROOM RETURNS {valid} FOR {guess}')  # DEBUGGING
         return valid
 
     def _validate_string(self, five_letters: str, param_name: str) -> None:
