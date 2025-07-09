@@ -75,8 +75,6 @@ def remove_word_hint(source: List[str], hint: WordHints) -> List[str]:
 
     # REMOVE IT
     for word in source:
-        if word == 'ghost':
-            print('REMOVE WORD HINT: GHOST!!!!!!!!!!!')  # DEBUGGING
         if hint.check_word(word):
             new_list.append(word)
 
