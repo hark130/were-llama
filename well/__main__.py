@@ -1,3 +1,5 @@
+"""Entry point for the WERE LLAMA (WALL) Python package."""
+
 from well.main import main
 
 

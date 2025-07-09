@@ -44,6 +44,8 @@ REL_WORD_FREQ: Dict[str, int] = {
     'Y'.lower(): 0.016, 'Z'.lower(): 0.0044,
 }
 
+# pylint: disable=too-many-lines
+# Leave me be.  I know...
 FIVE_LETTER_WORDS: Final[List[str]] = [
     'aargh', 'abaca', 'abaci', 'aback', 'abaft', 'abase',
     'abash', 'abate', 'abbey', 'abbot', 'abeam', 'abend',
