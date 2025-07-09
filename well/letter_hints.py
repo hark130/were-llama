@@ -1,0 +1,38 @@
+"""Defines the LetterHints class."""
+
+# Standard Imports
+# Third Party Imports
+# Local Imports
+
+
+class LetterHints():
+    """Established facts about a single letter in a Wordle word."""
+
+    def __init__(self):
+        """LetterHints() ctor."""
+        self.solution = ''                                     # Updated when the result is green
+        self.excluded = ''                                     # Characters this letter can NOT be
+        self._alphabet = 'abcdefghijklmnopqrstuvwxyz'.lower()  # For use during a solution
+
+    def exclude_letter(self, letter: str) -> None:
+        """Add an excluded letter."""
+        self._validate_letter(letter)
+        if letter.lower() not in self.excluded:
+            self.excluded = self.excluded + letter.lower()
+
+    def solve_it(self, letter: str) -> None:
+        """This letter is solved."""
+        if self.solution:
+            raise RuntimeError('This letter was already solved!')
+        self._validate_letter(letter)
+        self.excluded = self._alphabet.replace(letter, '')
+        self.solution = letter
+
+    def _validate_letter(self, letter: str) -> None:
+        """Validate one letter."""
+        if not isinstance(letter, str):
+            raise TypeError(f'"{letter}" must be a string instead of a {type(letter)}')
+        if 1 != len(letter):
+            raise ValueError(f'"{letter}" is not a single character!')
+        if letter.lower() not in self._alphabet:
+            raise ValueError(f'"{letter}" is not in the alphabet!')
