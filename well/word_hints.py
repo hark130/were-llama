@@ -9,6 +9,7 @@ from well.letter_hints import LetterHints
 
 
 class LetterIndex(IntEnum):
+    """Standardize how indices are referenced inside WordHints."""
     FIRST = 0
     SECOND = 1
     THIRD = 2
@@ -16,6 +17,8 @@ class LetterIndex(IntEnum):
     FIFTH = 4
 
 
+# pylint: disable=too-many-instance-attributes
+# Calm down, Pylint.  It's fine...
 class WordHints():
     """Established facts about a single Wordle word."""
 

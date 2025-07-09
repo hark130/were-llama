@@ -11,7 +11,6 @@ from well.word_hints import WordHints
 
 class CountError(ValueError):
     """A custom except indicating a count violation in a word."""
-    pass
 
 
 def calc_word(word: str, unique: bool = False) -> int:

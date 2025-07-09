@@ -30,7 +30,7 @@ def main() -> int:
     # 3. Remove archive words
     available_list = remove_words(FIVE_LETTER_WORDS, archive_list)
     # 4. Interact
-    while (True):
+    while True:
         # A. Calculate probability of remaining words
         ord_dict = calc_word_ordict(available_list, unique=unique)
         unique = False
@@ -44,14 +44,14 @@ def main() -> int:
             word_hints.update_word(temp_word, temp_result)
             # C. Remove invalid words
             available_list = remove_word_hints(available_list, word_hints)
-        except (TypeError, ValueError) as err:
-            print(f'Bad input encountered: {repr(err)}')
-            print('Try again.\n')
         except (CountError, RuntimeError) as err:
             print(f'Error encountered: {repr(err)}')
             print('Exiting.\n')
             result = 1
             break
+        except (TypeError, ValueError) as err:
+            print(f'Bad input encountered: {repr(err)}')
+            print('Try again.\n')
 
     # DONE
     return result
