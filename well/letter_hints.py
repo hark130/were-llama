@@ -24,17 +24,33 @@ class LetterHints():
         if letter not in self.excluded:
             self.excluded = self.excluded + letter
 
+    def is_solved(self) -> bool:
+        """Determine if this letter is already solved."""
+        # LOCAL VARIABLES
+        solved = False  # Die Antwoord
+
+        # IS IT?
+        if self.solution:
+            solved = True
+
+        # DONE
+        return solved
+
     def solve_it(self, letter: str) -> None:
         """This letter is solved.
 
         Args:
             letter: A single lowercase alphabet character to solve this letter with.
+
+        Raises:
+            RuntimeError: If this letter was already solved.
         """
-        if self.solution:
+        if self.is_solved():
             raise RuntimeError('This letter was already solved!')
         self._validate_letter(letter)
         self.excluded = self._alphabet.replace(letter.lower(), '')
         self.solution = letter.lower()
+
 
     def _validate_letter(self, letter: str) -> None:
         """Validate one letter.
