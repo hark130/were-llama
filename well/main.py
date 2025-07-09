@@ -8,7 +8,7 @@ from well.archive import get_past_answers
 from well.globals import FIVE_LETTER_WORDS, INPUT_GREEN
 from well.prompt import get_feedback
 from well.word_hints import WordHints
-from well.words import calc_word_ordict, remove_word_hints, remove_words
+from well.words import calc_word_ordict, CountError, remove_word_hints, remove_words
 
 
 def main() -> int:
@@ -19,7 +19,7 @@ def main() -> int:
     available_list = []       # List of available words
     ord_dict = OrderedDict()  # OrderedDict of word probabilities
     unique = True             # Only display unique solutions on round 1
-    word_hints = WordHints()   # WordHints object
+    word_hints = WordHints()  # WordHints object
     temp_word = ''            # Word input from user
     temp_result = ''          # Results input from user
 
@@ -47,6 +47,11 @@ def main() -> int:
         except (TypeError, ValueError) as err:
             print(f'Bad input encountered: {repr(err)}')
             print('Try again.\n')
+        except (CountError, RuntimeError) as err:
+            print(f'Error encountered: {repr(err)}')
+            print('Exiting.\n')
+            result = 1
+            break
 
     # DONE
     return result
