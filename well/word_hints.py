@@ -8,13 +8,13 @@ from well.globals import INPUT_GREEN, INPUT_SKIP, INPUT_YELLOW
 from well.letter_hints import LetterHints
 
 
-
 class LetterIndex(IntEnum):
     FIRST = 0
     SECOND = 1
     THIRD = 2
     FOURTH = 3
     FIFTH = 4
+
 
 class WordHints():
     """Established facts about a single Wordle word."""

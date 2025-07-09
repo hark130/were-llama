@@ -51,7 +51,6 @@ class LetterHints():
         self.excluded = self._alphabet.replace(letter.lower(), '')
         self.solution = letter.lower()
 
-
     def _validate_letter(self, letter: str) -> None:
         """Validate one letter.
 
