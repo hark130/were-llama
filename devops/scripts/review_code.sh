@@ -20,27 +20,27 @@ ORIGINAL_DIR=$(pwd)  # Working dir of execution
 pycodestyle --max-line-length=100 ./
 if [ $? -eq 0 ]
 then
-    echo -e "\n[✓] Pycodestyle likes the code base\n"
+    echo -e "[✓] Pycodestyle likes the code base"
 else
-    echo -e "\n[X] Pycodestyle does *NOT* like the code base\n"
+    echo -e "\n\n[X] Pycodestyle does *NOT* like the code base\n"
     EXIT_CODE=1
 fi
 # Pylint (WERE LLAMA)
 find ./well/ -type f -name "*.py" | xargs pylint --score=no
 if [ $? -eq 0 ]
 then
-    echo -e "\n[✓] Pylint approves of WERE LLAMA\n"
+    echo -e "[✓] Pylint approves of WERE LLAMA"
 else
-    echo -e "\n[X] Pylint does *NOT* approve of WERE LLAMA\n"
+    echo -e "\n\n[X] Pylint does *NOT* approve of WERE LLAMA\n"
     EXIT_CODE=1
 fi
 # Pylint (Test Code)
 # find ./test/ -type f -name "*.py" | xargs pylint --score=no --disable=duplicate-code
 # if [ $? -eq 0 ]
 # then
-#     echo -e "\n[✓] Pylint is happy with the test code\n"
+#     echo -e "[✓] Pylint is happy with the test code"
 # else
-#     echo -e "\n[X] Pylint is *NOT* happy with the test code\n"
+#     echo -e "\n\n[X] Pylint is *NOT* happy with the test code\n"
 #     EXIT_CODE=1
 # fi
 
