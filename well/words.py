@@ -6,6 +6,7 @@ from typing import Dict, List
 # Third Party Imports
 # Local Imports
 from well.globals import REL_START_FREQ, REL_WORD_FREQ
+from well.word_hints import WordHints
 
 
 class CountError(ValueError):
@@ -57,6 +58,30 @@ def calc_word_ordict(words: List[str], unique: bool = False) -> OrderedDict[str,
 
     # DONE
     return ord_dict
+
+
+def remove_word_hint(source: List[str], hint: WordHints) -> List[str]:
+    """Remove words from source that are incompatible with the word hint.
+
+    Args:
+        source: A list of words.
+        hint: The WordHints object to validate words against.
+
+    Returns:
+        The new list of source words missing words excluded by the word hint.
+    """
+    # LOCAL VARIABLES
+    new_list = []  # New list of words missing guesses excluded by hint
+
+    # REMOVE IT
+    for word in source:
+        if word == 'ghost':
+            print('REMOVE WORD HINT: GHOST!!!!!!!!!!!')  # DEBUGGING
+        if hint.check_word(word):
+            new_list.append(word)
+
+    # DONE
+    return new_list
 
 
 def remove_words(source: List[str], remove: List[str]) -> List[str]:
