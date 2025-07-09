@@ -47,8 +47,6 @@ class WordHints():
         self._validate_string(five_letters=guess, param_name='guess')
 
         # CHECK IT
-        # if guess == 'ghost':
-            # print(f'check_word() GHOST!!!!!!!!!!!!!!!!!!!!!!1')  # DEBUGGING
         # Is it excluded anywhere?
         valid = self._check_word_exclusion(guess=guess)
         # Is there room?
@@ -98,7 +96,8 @@ class WordHints():
                 if word[index] not in self._must_haves:
                     self._must_haves = self._must_haves + word[index]
             elif INPUT_GREEN == results[index]:
-                self.solve_it(letter=word[index], solved=index)
+                if not self.word[index].is_solved():
+                    self.solve_it(letter=word[index], solved=index)
             else:
                 raise ValueError(f'Invalid results entry detected: {results[index]}')
 
@@ -108,9 +107,15 @@ class WordHints():
         valid = True
 
         # CHECK IT
-        # Is it excluded anywhere?
         for index in self._indices:
-            if guess[index] in self.word[index].excluded:
+            # Does this index match a found solution?
+            if self.word[index].is_solved():
+                # print(f'SOLUTION EXISTS "{self.word[index].solution}" GUESS? {guess[index]}')  # DEBUGGING
+                if guess[index] != self.word[index].solution:
+                    valid = False
+                    break  # This letter is solved and the guesss doesn't match
+            # Is it excluded?
+            elif guess[index] in self.word[index].excluded:
                 # print(f'GUESS {guess[index]} FOUND IN EXCLUSION: {self.word[index].excluded}')  # DEBUGGING
                 valid = False  # Not a valid guess
                 break
