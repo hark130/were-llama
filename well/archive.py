@@ -19,8 +19,8 @@ def get_past_answers(archive_url: str = ARCHIVE_URL) -> List[str]:
         List of five letter strings on success.
     """
     # LOCAL VARIABLES
-    words = _get_all_items(url=archive_url, tag='h2')
-    word_list = []                                           # List of found words
+    words = _get_all_items(url=archive_url, tag='h2')  # All of the li tag strings
+    word_list = []                                     # List of Wordle-compliant words
 
     # PARSE IT
     for word in words:

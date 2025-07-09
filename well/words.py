@@ -60,22 +60,22 @@ def calc_word_ordict(words: List[str], unique: bool = False) -> OrderedDict[str,
     return ord_dict
 
 
-def remove_word_hint(source: List[str], hint: WordHints) -> List[str]:
-    """Remove words from source that are incompatible with the word hint.
+def remove_word_hints(source: List[str], hints: WordHints) -> List[str]:
+    """Remove words from source that are incompatible with the word hints.
 
     Args:
         source: A list of words.
-        hint: The WordHints object to validate words against.
+        hints: The WordHints object to validate words against.
 
     Returns:
-        The new list of source words missing words excluded by the word hint.
+        The new list of source words missing words excluded by the word hints.
     """
     # LOCAL VARIABLES
-    new_list = []  # New list of words missing guesses excluded by hint
+    new_list = []  # New list of words missing guesses excluded by hints
 
     # REMOVE IT
     for word in source:
-        if hint.check_word(word):
+        if hints.check_word(word):
             new_list.append(word)
 
     # DONE
