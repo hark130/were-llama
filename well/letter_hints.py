@@ -15,24 +15,42 @@ class LetterHints():
         self._alphabet = 'abcdefghijklmnopqrstuvwxyz'.lower()  # For use during a solution
 
     def exclude_letter(self, letter: str) -> None:
-        """Add an excluded letter."""
+        """Add an excluded letter.
+
+        Args:
+            letter: A single lowercase alphabet character to exclude from these letter hints.
+        """
         self._validate_letter(letter)
-        if letter.lower() not in self.excluded:
-            self.excluded = self.excluded + letter.lower()
+        if letter not in self.excluded:
+            self.excluded = self.excluded + letter
 
     def solve_it(self, letter: str) -> None:
-        """This letter is solved."""
+        """This letter is solved.
+
+        Args:
+            letter: A single lowercase alphabet character to solve this letter with.
+        """
         if self.solution:
             raise RuntimeError('This letter was already solved!')
         self._validate_letter(letter)
-        self.excluded = self._alphabet.replace(letter, '')
-        self.solution = letter
+        self.excluded = self._alphabet.replace(letter.lower(), '')
+        self.solution = letter.lower()
 
     def _validate_letter(self, letter: str) -> None:
-        """Validate one letter."""
+        """Validate one letter.
+
+        Args:
+            letter: A single lowercase alphabet character to validate.
+
+        Raise:
+            TypeError: Bad type.
+            ValueError: Non-lowercase letter, non-alphabet character, or bad string length.
+        """
         if not isinstance(letter, str):
             raise TypeError(f'"{letter}" must be a string instead of a {type(letter)}')
         if 1 != len(letter):
             raise ValueError(f'"{letter}" is not a single character!')
-        if letter.lower() not in self._alphabet:
+        if letter.lower() != letter:
+            raise ValueError(f'"letter" must be lower case: {letter}')
+        if letter not in self._alphabet:
             raise ValueError(f'"{letter}" is not in the alphabet!')
