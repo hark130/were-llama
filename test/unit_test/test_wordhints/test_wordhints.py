@@ -70,6 +70,6 @@ class TestWordHints(TediousUnitTest):
         to unit test other class methods.  Any Exception raised will result in a test case failure.
         """
         try:
-            return self.wh_obj.update_word(word=word, results=results)
+            self.wh_obj.update_word(word=word, results=results)
         except (RuntimeError, TypeError, ValueError) as err:
             self.fail_test_case(f'WordHints().update_word({word}, {results}) raised: {repr(err)}')

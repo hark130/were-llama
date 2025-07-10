@@ -9,9 +9,9 @@
 from collections import namedtuple
 from typing import Any, List
 # Third Party Imports
+from test.unit_test.test_wordhints.test_wordhints import TestWordHints  # Pylint insisted
 from tediousstart.tediousstart import execute_test_cases
 # Local Imports
-from test.unit_test.test_wordhints.test_wordhints import TestWordHints
 
 
 # Linked word updates and results as-if read from user input
@@ -188,7 +188,7 @@ class ErrorTestWordHintsCheckWord(TestWordHintsCheckWord):
         guess_input = None   # Test case input
         exp_err = TypeError  # Expected exception type
         # Expected exception message substring
-        exp_msg = 'must be a string'  
+        exp_msg = 'must be a string'
         self.run_test_fail(updates=updates, guess_input=guess_input, err_type=exp_err,
                            err_msg=exp_msg)
 
@@ -198,7 +198,7 @@ class ErrorTestWordHintsCheckWord(TestWordHintsCheckWord):
         guess_input = b'beans'  # Test case input
         exp_err = TypeError     # Expected exception type
         # Expected exception message substring
-        exp_msg = 'must be a string'  
+        exp_msg = 'must be a string'
         self.run_test_fail(updates=updates, guess_input=guess_input, err_type=exp_err,
                            err_msg=exp_msg)
 
@@ -212,7 +212,7 @@ class BoundaryTestWordHintsCheckWord(TestWordHintsCheckWord):
         guess_input = ''      # Test case input
         exp_err = ValueError  # Expected exception type
         # Expected exception message substring
-        exp_msg = 'not five characters long'  
+        exp_msg = 'not five characters long'
         self.run_test_fail(updates=updates, guess_input=guess_input, err_type=exp_err,
                            err_msg=exp_msg)
 
@@ -222,7 +222,7 @@ class BoundaryTestWordHintsCheckWord(TestWordHintsCheckWord):
         guess_input = 'b'     # Test case input
         exp_err = ValueError  # Expected exception type
         # Expected exception message substring
-        exp_msg = 'not five characters long'  
+        exp_msg = 'not five characters long'
         self.run_test_fail(updates=updates, guess_input=guess_input, err_type=exp_err,
                            err_msg=exp_msg)
 
@@ -232,7 +232,7 @@ class BoundaryTestWordHintsCheckWord(TestWordHintsCheckWord):
         guess_input = 'bean'  # Test case input
         exp_err = ValueError  # Expected exception type
         # Expected exception message substring
-        exp_msg = 'not five characters long'  
+        exp_msg = 'not five characters long'
         self.run_test_fail(updates=updates, guess_input=guess_input, err_type=exp_err,
                            err_msg=exp_msg)
 
@@ -242,7 +242,7 @@ class BoundaryTestWordHintsCheckWord(TestWordHintsCheckWord):
         guess_input = 'beeeen'  # Test case input
         exp_err = ValueError    # Expected exception type
         # Expected exception message substring
-        exp_msg = 'not five characters long'  
+        exp_msg = 'not five characters long'
         self.run_test_fail(updates=updates, guess_input=guess_input, err_type=exp_err,
                            err_msg=exp_msg)
 
@@ -252,7 +252,7 @@ class BoundaryTestWordHintsCheckWord(TestWordHintsCheckWord):
         guess_input = 'b' * 117  # Test case input
         exp_err = ValueError     # Expected exception type
         # Expected exception message substring
-        exp_msg = 'not five characters long'  
+        exp_msg = 'not five characters long'
         self.run_test_fail(updates=updates, guess_input=guess_input, err_type=exp_err,
                            err_msg=exp_msg)
 
