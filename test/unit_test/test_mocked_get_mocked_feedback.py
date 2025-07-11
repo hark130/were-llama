@@ -105,7 +105,7 @@ class NormalTestMockedGetMockedFeedback(TestMockedGetMockedFeedback):
                            exp_results=exp_results)
 
     def test_n02_bad_guess(self):
-        """No hits."""
+        """One off-position hits."""
         guess_input = 'frank'                        # Test case input: guess
         wordle_input = 'laugh'                       # Test case input: wordle
         exp_results = self.format_results('  y  ')   # Expected results
@@ -113,7 +113,7 @@ class NormalTestMockedGetMockedFeedback(TestMockedGetMockedFeedback):
                            exp_results=exp_results)
 
     def test_n03_ok_guess(self):
-        """No hits."""
+        """One on and one off hit."""
         guess_input = 'blown'                        # Test case input: guess
         wordle_input = 'beans'                       # Test case input: wordle
         exp_results = self.format_results('g   y')   # Expected results
@@ -121,7 +121,7 @@ class NormalTestMockedGetMockedFeedback(TestMockedGetMockedFeedback):
                            exp_results=exp_results)
 
     def test_n04_good_guess(self):
-        """No hits."""
+        """Two on-position hits."""
         guess_input = 'frank'                        # Test case input: guess
         wordle_input = 'beans'                       # Test case input: wordle
         exp_results = self.format_results('  gg ')   # Expected results
@@ -129,7 +129,7 @@ class NormalTestMockedGetMockedFeedback(TestMockedGetMockedFeedback):
                            exp_results=exp_results)
 
     def test_n05_great_guess(self):
-        """No hits."""
+        """Four on-position hits."""
         guess_input = 'loopy'                        # Test case input: guess
         wordle_input = 'goopy'                       # Test case input: wordle
         exp_results = self.format_results(' gggg')   # Expected results
@@ -137,7 +137,7 @@ class NormalTestMockedGetMockedFeedback(TestMockedGetMockedFeedback):
                            exp_results=exp_results)
 
     def test_n06_best_guess(self):
-        """No hits."""
+        """All hits."""
         guess_input = 'beans'                        # Test case input: guess
         wordle_input = 'beans'                       # Test case input: wordle
         exp_results = self.format_results('ggggg')   # Expected results
@@ -294,6 +294,86 @@ class BoundaryTestMockedGetMockedFeedback(TestMockedGetMockedFeedback):
 
 class SpecialTestMockedGetMockedFeedback(TestMockedGetMockedFeedback):
     """Special Test Cases."""
+
+    def test_s01_wordle_repeats_non_guess(self):
+        """Wordle has a repeating letter not in the guess."""
+        guess_input = 'beans'                        # Test case input: guess
+        wordle_input = 'floof'                       # Test case input: wordle
+        exp_results = self.format_results('     ')   # Expected results
+        self.run_test_pass(guess_input=guess_input, wordle_input=wordle_input,
+                           exp_results=exp_results)
+
+    def test_s02_wordle_repeats_first_guess_letter(self):
+        """First guess letter is repeated in the wordle."""
+        guess_input = 'frank'                        # Test case input: guess
+        wordle_input = 'floof'                       # Test case input: wordle
+        exp_results = self.format_results('g    ')   # Expected results
+        self.run_test_pass(guess_input=guess_input, wordle_input=wordle_input,
+                           exp_results=exp_results)
+
+    def test_s03_wordle_repeats_second_guess_letter(self):
+        """Second guess letter is repeated in the wordle."""
+        guess_input = 'after'                        # Test case input: guess
+        wordle_input = 'floof'                       # Test case input: wordle
+        exp_results = self.format_results(' y   ')   # Expected results
+        self.run_test_pass(guess_input=guess_input, wordle_input=wordle_input,
+                           exp_results=exp_results)
+
+    def test_s04_wordle_repeats_third_guess_letter(self):
+        """Third guess letter is repeated in the wordle."""
+        guess_input = 'ulfen'                        # Test case input: guess
+        wordle_input = 'floof'                       # Test case input: wordle
+        exp_results = self.format_results(' gy  ')   # Expected results
+        self.run_test_pass(guess_input=guess_input, wordle_input=wordle_input,
+                           exp_results=exp_results)
+
+    def test_s05_wordle_repeats_fourth_guess_letter(self):
+        """Fourth guess letter is repeated in the wordle."""
+        guess_input = 'lords'                        # Test case input: guess
+        wordle_input = 'dudes'                       # Test case input: wordle
+        exp_results = self.format_results('   yg')   # Expected results
+        self.run_test_pass(guess_input=guess_input, wordle_input=wordle_input,
+                           exp_results=exp_results)
+
+    def test_s06_wordle_repeats_fifth_guess_letter(self):
+        """Fifth guess letter is repeated in the wordle."""
+        guess_input = 'lords'                        # Test case input: guess
+        wordle_input = 'sassy'                       # Test case input: wordle
+        exp_results = self.format_results('    y')   # Expected results
+        self.run_test_pass(guess_input=guess_input, wordle_input=wordle_input,
+                           exp_results=exp_results)
+
+    def test_s07_guess_repeats_wordle_once(self):
+        """The guess has a repeating letter found in the wordle once."""
+        guess_input = 'bubba'                        # Test case input: guess
+        wordle_input = 'beans'                       # Test case input: wordle
+        exp_results = self.format_results('g   y')   # Expected results
+        self.run_test_pass(guess_input=guess_input, wordle_input=wordle_input,
+                           exp_results=exp_results)
+
+    def test_s08_guess_repeats_wordle_once_second_in_place(self):
+        """The guess has a repeating letter, 2nd is in-place, found in the wordle once."""
+        guess_input = 'boooh'                        # Test case input: guess
+        wordle_input = 'prods'                       # Test case input: wordle
+        exp_results = self.format_results('  g  ')   # Expected results
+        self.run_test_pass(guess_input=guess_input, wordle_input=wordle_input,
+                           exp_results=exp_results)
+
+    def test_s09_guess_repeats_wordle_twice(self):
+        """The guess has a repeating letter, 2nd is in-place, found in the wordle once."""
+        guess_input = 'boooh'                        # Test case input: guess
+        wordle_input = 'foody'                       # Test case input: wordle
+        exp_results = self.format_results(' gg  ')   # Expected results
+        self.run_test_pass(guess_input=guess_input, wordle_input=wordle_input,
+                           exp_results=exp_results)
+
+    def test_s10_what_does_wordle_do_here(self):
+        """The guess has a repeating letter found in the wordle once, once in-place and once not."""
+        guess_input = 'foody'                        # Test case input: guess
+        wordle_input = 'flops'                       # Test case input: wordle
+        exp_results = self.format_results('g g  ')   # Expected results
+        self.run_test_pass(guess_input=guess_input, wordle_input=wordle_input,
+                           exp_results=exp_results)
 
 
 if __name__ == '__main__':
