@@ -10,7 +10,7 @@ from hobo.subprocess_wrapper import execute_subprocess_cmd
 def get_commit_hash() -> str:
     """Get the top commit hash from git."""
     std_out, std_err = execute_subprocess_cmd(['git', 'rev-parse', 'HEAD'])
-    return std_out    
+    return std_out.strip()
 
 
 def get_timestamp() -> str:
