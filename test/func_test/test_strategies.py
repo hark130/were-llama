@@ -8,18 +8,23 @@
 """
 
 # Standard Imports
-from collections import namedtuple
+from collections import OrderedDict, namedtuple
 from copy import deepcopy
 from dataclasses import dataclass
 from enum import auto, IntEnum
 from pathlib import Path
 from typing import Any, List
+import os
+import sys
 # Third Party Imports
 from tediousstart.tediousfunctest import TediousFuncTest
 from tediousstart.tediousstart import execute_test_cases, TediousStart
 # Local Imports
 from well.globals import FIVE_LETTER_WORDS
-from test.func_test.misc import get_timestamp
+from well.word_hints import WordHints
+from well.words import calc_word_ordict, remove_word_hints
+from test.func_test.misc import get_commit_hash, get_timestamp
+from test.func_test.mocked import get_mocked_feedback
 
 
 @dataclass
@@ -71,7 +76,7 @@ class TestStrategies(TediousStart):
         # LOCAL VARIABLES
         avg_guesses = '{:.3f}'.format(total_guesses / num_inputs)  # Average guesses
         avg_solved = '{:.3f}'.format(total_solved / num_inputs)    # Average solved
-        avg_rem_r1 = '{:.3f}'.format(total_rem_w1 / num_inputs)    # Average words after Rnd 1
+        avg_rem_r1 = '{:.3f}'.format(total_rem_r1 / num_inputs)    # Average words after Rnd 1
         test_name = self.id().split('.')[-1]                       # Test case name
         test_stop = get_timestamp()                                # Stop the timer
         commit_hash = get_commit_hash()                            # Top commit hash
@@ -80,27 +85,28 @@ class TestStrategies(TediousStart):
                                 'test_strategies-' + test_name + '-' + test_stop + '.txt')
         # Format string for the log entry
         log_entry = """
-            TEST START: {start}
-                Commit Hash: {commit_hash}
-                Total Inputs: {num_inputs}
-                Avg Solved: {avg_solved}
-                Avg Guesses: {avg_guesses}
-                Avg Remaining Guesses (Round 1): {avg_rem_r1}
-                Num Errors: {num_errors}
-                ERRORS: {error_string}
-            TEST STOP:  {stop}
+TEST START: {start}
+    Commit Hash: {commit_hash}
+    Total Inputs: {num_inputs}
+    Avg Solved: {avg_solved}
+    Avg Guesses: {avg_guesses}
+    Avg Remaining Guesses (Round 1): {avg_rem_r1}
+    Num Errors: {num_errors}
+    ERRORS: {error_string}
+TEST STOP:  {stop}
         """
         # Formatted log entry
         actual_log_entry = log_entry.format(start=self._test_start, commit_hash=commit_hash,
                                             num_inputs=num_inputs, avg_solved=avg_solved,
                                             avg_guesses=avg_guesses, avg_rem_r1=avg_rem_r1,
-                                            error_string='\n'.join(errors), stop=test_stop)
+                                            num_errors=total_errors,
+                                            error_string='\n' + '\n'.join(errors), stop=test_stop)
 
         # LOG IT
         # Print it
         print(actual_log_entry)
         with open(log_name, 'w') as out_file:
-            out_file.write(log_name)
+            out_file.write(actual_log_entry)
         print(f'Log saved to: {log_name}')
 
     def replicate_main(self, source: List[str], wordle: str,
@@ -198,8 +204,8 @@ class TestStrategies(TediousStart):
 
         # 2. For each word
         for word_input in word_inputs:
-            temp_stats = replicate_main(source=FIVE_LETTER_WORDS, wordle=word_input,
-                                        strategy=strategy)
+            temp_stats = self.replicate_main(source=FIVE_LETTER_WORDS, wordle=word_input,
+                                             strategy=strategy)
             total_guesses += temp_stats.num_guesses
             if temp_stats.solved:
                 total_solved += 1
@@ -217,12 +223,6 @@ class TestStrategies(TediousStart):
 
 class NormalTestStrategies(TestStrategies):
     """Normal Test Cases."""
-
-class TestStrategy(IntEnum):
-    """Communicate the desired test case strategy."""
-    UNIQUE_FALSE = auto()  # calc_word_ordict(unique=False)
-    UNIQUE_FIRST = auto()  # calc_word_ordict(unique=True) on Round 1 only
-    UNIQUE_TRUE = auto()   # calc_word_ordict(unique=True)
 
     def test_n01_short_unique_false(self):
         """calc_word_ordict(unique=False)."""
