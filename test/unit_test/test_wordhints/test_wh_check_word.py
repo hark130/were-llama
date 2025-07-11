@@ -40,7 +40,7 @@ class TestWordHintsCheckWord(TestWordHints):
     # Methods listed in alphabetical order
     def run_test_fail(self, updates: List[UserFeedback], guess_input: Any,
                       err_type: Exception, err_msg: str = '') -> None:
-        """Setup a test case that's expected to pass.
+        """Setup a test case that's expected to fail.
 
         Args:
             updates: Optional; A list of well-formed input to pass to WordHints().update_word().
@@ -247,7 +247,7 @@ class BoundaryTestWordHintsCheckWord(TestWordHintsCheckWord):
                            err_msg=exp_msg)
 
     def test_b05_bad_length_eleventy_seven(self):
-        """The guess argument is six characters long."""
+        """The guess argument is eleventy seven characters long."""
         updates = None           # Pre-call input to WordHints().update_word()
         guess_input = 'b' * 117  # Test case input
         exp_err = ValueError     # Expected exception type
