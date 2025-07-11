@@ -21,7 +21,8 @@ def get_mocked_feedback(guess: str, wordle: str) -> str:
             well.globals.INPUT_SKIP
     """
     # LOCAL VARIABLES
-    result = ''  # Mocked feedback
+    result = ''   # Mocked feedback
+    matches = ''  # Store letters already been accounted for
 
     # INPUT VALIDATION
     # guess
@@ -34,16 +35,26 @@ def get_mocked_feedback(guess: str, wordle: str) -> str:
         raise ValueError(f'The wordle value "{wordle}" is not five characters long!')
 
     # GET IT
-    for g_char, w_char in zip(guess, wordle):
+    for index in range(5):
+    # for g_char, w_char in zip(guess, wordle):
+        g_char = guess[index]
+        w_char = wordle[index]
         if g_char == w_char:
             result = result + INPUT_GREEN
+            matches = matches + g_char  # Accounted for
         elif g_char in wordle:
             if 1 == wordle.count(g_char):
                 result = result + INPUT_YELLOW
+                matches = matches + g_char  # Accounted for
             else:
                 # Multiple occurences of g_char in the wordle
-                # TO DO: DON'T DO NOW... IMPLEMENT THIS LATER
-                raise NotImplementedError(f'UNABLE TO HANDLE GUESS "{guess}" FOR WORDLE "{wordle}"')
+                print(f'\nGUESS:   {guess}')  # DEBUGGING
+                print(f'WORDLE:  {wordle}')  # DEBUGGING
+                print(f'MATCHES: {matches}')  # DEBUGGING
+                if wordle.count(g_char) == matches.count(g_char):
+                    result = result + INPUT_SKIP  # All matches for this letter accounted for
+                else:
+                    result = result + INPUT_YELLOW
         else:
             result = result + INPUT_SKIP
 
