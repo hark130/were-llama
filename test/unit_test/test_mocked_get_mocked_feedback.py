@@ -8,11 +8,9 @@
 """
 
 # Standard Imports
-from collections import namedtuple
-from typing import Any, List
+from typing import Any
 # Third Party Imports
 from test.func_test.mocked import get_mocked_feedback
-from test.unit_test.test_wordhints.test_wordhints import TestWordHints  # Pylint insisted
 from tediousstart.tediousstart import execute_test_cases
 from tediousstart.tediousunittest import TediousUnitTest
 # Local Imports

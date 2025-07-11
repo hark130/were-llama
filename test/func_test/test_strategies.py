@@ -8,16 +8,14 @@
 """
 
 # Standard Imports
-from collections import OrderedDict, namedtuple
+from collections import OrderedDict
 from copy import deepcopy
 from dataclasses import dataclass
 from enum import auto, IntEnum
-from pathlib import Path
-from typing import Any, List
+from typing import List
 import os
 import sys
 # Third Party Imports
-from tediousstart.tediousfunctest import TediousFuncTest
 from tediousstart.tediousstart import execute_test_cases, TediousStart
 # Local Imports
 from well.globals import FIVE_LETTER_WORDS
