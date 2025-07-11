@@ -2,9 +2,11 @@
 
     Typical usage example:
 
-    python -m test                                            # Run all the test cases
-    python -m test.unit_test                                  # Run all the unit tests
-    python -m test.unit_test.test_mocked_get_mocked_feedback  # Run these test cases
+    python -m test                                                       # Run all the test cases
+    python -m test.unit_test                                             # Run all the unit tests
+    python -m test.unit_test.test_mocked_get_mocked_feedback             # Run these test cases
+    python -m unittest test.unit_test.test_mocked_get_mocked_feedback.\
+SpecialTestMockedGetMockedFeedback.test_s09_guess_repeats_wordle_twice   # Run this s09
 """
 
 # Standard Imports
@@ -367,10 +369,19 @@ class SpecialTestMockedGetMockedFeedback(TestMockedGetMockedFeedback):
                            exp_results=exp_results)
 
     def test_s10_what_does_wordle_do_here(self):
-        """The guess has a repeating letter found in the wordle once, once in-place and once not."""
+        """The guess has a repeating letter found in the wordle once, once in-place and once not.
+
+        ChatGPT says...
+        This follows the official New York Times Wordle rules:
+        🟩 Green – letter is in the correct position.
+        🟨 Yellow – letter is in the word but in the wrong position.
+        ⬛ Gray – letter is not in the word at all or has already been accounted for.
+
+        The key for this test case is... "already been accounted for".
+        """
         guess_input = 'foody'                        # Test case input: guess
         wordle_input = 'flops'                       # Test case input: wordle
-        exp_results = self.format_results('g g  ')   # Expected results
+        exp_results = self.format_results('gy   ')   # Expected results
         self.run_test_pass(guess_input=guess_input, wordle_input=wordle_input,
                            exp_results=exp_results)
 
