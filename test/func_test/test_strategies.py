@@ -239,7 +239,6 @@ class BoundaryTestTestStrategies(TestStrategies):
     """Boundary Test Cases."""
 
 
-
 class SpecialTestStrategies(TestStrategies):
     """Special Test Cases."""
 

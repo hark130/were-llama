@@ -144,6 +144,7 @@ class NormalTestMockedGetMockedFeedback(TestMockedGetMockedFeedback):
         self.run_test_pass(guess_input=guess_input, wordle_input=wordle_input,
                            exp_results=exp_results)
 
+
 class ErrorTestMockedGetMockedFeedback(TestMockedGetMockedFeedback):
     """Error Test Cases."""
 
