@@ -268,6 +268,29 @@ class SpecialTestWordHintsCheckWord(TestWordHintsCheckWord):
         exp_results = False    # Expected results
         self.run_test_pass(updates=updates, guess_input=guess_input, exp_results=exp_results)
 
+    def test_s02_legacy_game_test_20250212_round_1(self):
+        """Example Wordle #1334."""
+        updates = None         # Pre-call input to WordHints().update_word()
+        guess_input = 'stein'  # Test case input
+        exp_results = True     # Expected results
+        self.run_test_pass(updates=updates, guess_input=guess_input, exp_results=exp_results)
+
+    def test_s03_legacy_game_test_20250212_round_2(self):
+        """Example Wordle #1334."""
+        # Pre-call input to WordHints().update_word()
+        updates = [UserFeedback('stein', '   g ')]  # ?????
+        guess_input = 'radio'  # Test case input
+        exp_results = True     # Expected results
+        self.run_test_pass(updates=updates, guess_input=guess_input, exp_results=exp_results)
+
+    def test_s04_legacy_game_test_20250212_round_3(self):
+        """Example Wordle #1334."""
+        # Pre-call input to WordHints().update_word()
+        updates = [UserFeedback('stein', '   g '), UserFeedback('radio', 'ggyg ')]  # ?????
+        guess_input = 'rapid'  # Test case input
+        exp_results = True     # Expected results
+        self.run_test_pass(updates=updates, guess_input=guess_input, exp_results=exp_results)
+
 
 if __name__ == '__main__':
     execute_test_cases()
