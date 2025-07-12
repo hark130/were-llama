@@ -385,6 +385,78 @@ class SpecialTestMockedGetMockedFeedback(TestMockedGetMockedFeedback):
         self.run_test_pass(guess_input=guess_input, wordle_input=wordle_input,
                            exp_results=exp_results)
 
+    def test_s12_legacy_game_test_20250212(self):
+        """Example Wordle #1334: Round 1."""
+        guess_input = 'stein'                        # Test case input: guess
+        wordle_input = 'rapid'                       # Test case input: wordle
+        exp_results = self.format_results('   g ')   # Expected results
+        self.run_test_pass(guess_input=guess_input, wordle_input=wordle_input,
+                           exp_results=exp_results)
+
+    def test_s13_legacy_game_test_20250213(self):
+        """Example Wordle #1335: Round 1."""
+        guess_input = 'stein'                        # Test case input: guess
+        wordle_input = 'rumba'                       # Test case input: wordle
+        exp_results = self.format_results('     ')   # Expected results
+        self.run_test_pass(guess_input=guess_input, wordle_input=wordle_input,
+                           exp_results=exp_results)
+
+    def test_s13_legacy_game_test_20250214(self):
+        """Example Wordle #1336: Round 1."""
+        guess_input = 'stein'                        # Test case input: guess
+        wordle_input = 'ditty'                       # Test case input: wordle
+        exp_results = self.format_results(' y y ')   # Expected results
+        self.run_test_pass(guess_input=guess_input, wordle_input=wordle_input,
+                           exp_results=exp_results)
+
+    def test_s14_legacy_game_test_20250215(self):
+        """Example Wordle #1336: Round 2."""
+        guess_input = 'carol'                        # Test case input: guess
+        wordle_input = 'crook'                       # Test case input: wordle
+        exp_results = self.format_results('g yg ')   # Expected results
+        self.run_test_pass(guess_input=guess_input, wordle_input=wordle_input,
+                           exp_results=exp_results)
+
+    def test_s15_legacy_game_test_20250219(self):
+        """Example Wordle #1341: Round 1."""
+        guess_input = 'radar'                        # Test case input: guess
+        wordle_input = 'madly'                       # Test case input: wordle
+        exp_results = self.format_results(' gg  ')   # Expected results
+        self.run_test_pass(guess_input=guess_input, wordle_input=wordle_input,
+                           exp_results=exp_results)
+
+    def test_s16_legacy_game_test_20250706_rnd_1(self):
+        """Example Wordle #1478: Round 1."""
+        guess_input = 'naval'                        # Test case input: guess
+        wordle_input = 'atria'                       # Test case input: wordle
+        exp_results = self.format_results(' y y ')   # Expected results
+        self.run_test_pass(guess_input=guess_input, wordle_input=wordle_input,
+                           exp_results=exp_results)
+
+    def test_s17_legacy_game_test_20250706_rnd_2(self):
+        """Example Wordle #1478: Round 2."""
+        guess_input = 'stair'                        # Test case input: guess
+        wordle_input = 'atria'                       # Test case input: wordle
+        exp_results = self.format_results(' gygy')   # Expected results
+        self.run_test_pass(guess_input=guess_input, wordle_input=wordle_input,
+                           exp_results=exp_results)
+
+    def test_s18_legacy_game_test_20250707_rnd_1(self):
+        """Example Wordle #1479: Round 1."""
+        guess_input = 'attic'                        # Test case input: guess
+        wordle_input = 'stilt'                       # Test case input: wordle
+        exp_results = self.format_results(' gyy ')   # Expected results
+        self.run_test_pass(guess_input=guess_input, wordle_input=wordle_input,
+                           exp_results=exp_results)
+
+    def test_s19_legacy_game_test_20250707_rnd_2(self):
+        """Example Wordle #1479: Round 2."""
+        guess_input = 'split'                        # Test case input: guess
+        wordle_input = 'stilt'                       # Test case input: wordle
+        exp_results = self.format_results('g yyg')   # Expected results
+        self.run_test_pass(guess_input=guess_input, wordle_input=wordle_input,
+                           exp_results=exp_results)
+
 
 if __name__ == '__main__':
     execute_test_cases()
