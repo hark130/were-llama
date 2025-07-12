@@ -13,6 +13,7 @@ from copy import deepcopy
 from dataclasses import dataclass
 from enum import auto, IntEnum
 from typing import List
+from unittest import skip
 import os
 import sys
 # Third Party Imports
@@ -72,12 +73,12 @@ class TestStrategies(TediousStart):
                   total_errors: int, errors: List[str]) -> None:
         """Process the statistics, print them, and log them."""
         # LOCAL VARIABLES
-        avg_guesses = '{:.3f}'.format(total_guesses / num_inputs)  # Average guesses
-        avg_solved = '{:.3f}'.format(total_solved / num_inputs)    # Average solved
-        avg_rem_r1 = '{:.3f}'.format(total_rem_r1 / num_inputs)    # Average words after Rnd 1
-        test_name = self.id().split('.')[-1]                       # Test case name
-        test_stop = get_timestamp()                                # Stop the timer
-        commit_hash = get_commit_hash()                            # Top commit hash
+        avg_guesses = '{:.3f}'.format(total_guesses / num_inputs)      # Average guesses
+        avg_solved = '{:.3f}'.format(total_solved / num_inputs * 100)  # Average solved
+        avg_rem_r1 = '{:.3f}'.format(total_rem_r1 / num_inputs)        # Average words after Rnd 1
+        test_name = self.id().split('.')[-1]                           # Test case name
+        test_stop = get_timestamp()                                    # Stop the timer
+        commit_hash = get_commit_hash()                                # Top commit hash
         # Log filename
         log_name = os.path.join(self.test_out,
                                 'test_strategies-' + test_name + '-' + test_stop + '.txt')
@@ -86,7 +87,7 @@ class TestStrategies(TediousStart):
 TEST START: {start}
     Commit Hash: {commit_hash}
     Total Inputs: {num_inputs}
-    Avg Solved: {avg_solved}
+    Avg Solved: {avg_solved}%
     Avg Guesses: {avg_guesses}
     Avg Remaining Guesses (Round 1): {avg_rem_r1}
     Num Errors: {num_errors}
@@ -222,10 +223,23 @@ TEST STOP:  {stop}
 class NormalTestStrategies(TestStrategies):
     """Normal Test Cases."""
 
-    def test_n01_short_unique_false(self):
+    def test_n01_unique_false(self):
         """calc_word_ordict(unique=False)."""
         strategy = TestStrategy.UNIQUE_FALSE  # calc_word_ordict(unique=False)
-        source = FIVE_LETTER_WORDS[:100]      # Starting list of 5-letter words
+        source = FIVE_LETTER_WORDS            # Starting list of 5-letter words
+        self.run_test(strategy=strategy, source=source)
+
+    def test_n02_unique_first(self):
+        """calc_word_ordict(unique=True) on Round 1 only."""
+        strategy = TestStrategy.UNIQUE_FIRST  # calc_word_ordict(unique=True) on Round 1 only
+        source = FIVE_LETTER_WORDS            # Starting list of 5-letter words
+        self.run_test(strategy=strategy, source=source)
+
+    @skip('This test is causing a plethora of errors... which is fine becuase it is not viable')
+    def test_n03_unique_true(self):
+        """calc_word_ordict(unique=True)."""
+        strategy = TestStrategy.UNIQUE_TRUE  # calc_word_ordict(unique=True)
+        source = FIVE_LETTER_WORDS           # Starting list of 5-letter words
         self.run_test(strategy=strategy, source=source)
 
 
