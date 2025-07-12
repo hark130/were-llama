@@ -52,6 +52,9 @@ def main() -> int:
         except (TypeError, ValueError) as err:
             print(f'Bad input encountered: {repr(err)}')
             print('Try again.\n')
+        except KeyboardInterrupt:
+            print('\nExiting.\n')
+            break
 
     # DONE
     return result
