@@ -17,13 +17,13 @@ from unittest import skip
 import os
 import sys
 # Third Party Imports
+from test.func_test.misc import get_commit_hash, get_timestamp
+from test.func_test.mocked import get_mocked_feedback
 from tediousstart.tediousstart import execute_test_cases, TediousStart
 # Local Imports
 from well.globals import FIVE_LETTER_WORDS
 from well.word_hints import WordHints
 from well.words import calc_word_ordict, remove_word_hints
-from test.func_test.misc import get_commit_hash, get_timestamp
-from test.func_test.mocked import get_mocked_feedback
 
 
 @dataclass
@@ -33,6 +33,16 @@ class TestCaseStats:
     solved: bool         # Solved it
     rem_words_1: int     # Number of valid guesses left after Round 1
     error: bool = False  # Communicate an internal error (e.g., 0 guesses left) for logging)
+
+
+@dataclass
+class TotalTestStats:
+    """Total test case statistics."""
+    total_inputs: int       # Total number of test inputs
+    total_guesses: int      # Total number of guesses to get the solution
+    total_solved: int       # Solved it
+    total_rem_words_1: int  # Number of valid guesses left after Round 1
+    total_errors: int       # Communicate an internal error (e.g., 0 guesses left) for logging)
 
 
 class TestStrategy(IntEnum):
@@ -69,45 +79,44 @@ class TestStrategies(TediousStart):
         """Log an error to stderr without failing the test case."""
         print(self._test_error.format(str(msg)), file=sys.stderr)
 
-    def log_stats(self, num_inputs: int, total_guesses: int, total_solved: int, total_rem_r1: int,
-                  total_errors: int, errors: List[str]) -> None:
+    def log_stats(self, total_stats: TotalTestStats, errors: List[str]) -> None:
         """Process the statistics, print them, and log them."""
         # LOCAL VARIABLES
-        avg_guesses = '{:.3f}'.format(total_guesses / num_inputs)      # Average guesses
-        avg_solved = '{:.3f}'.format(total_solved / num_inputs * 100)  # Average solved
-        avg_rem_r1 = '{:.3f}'.format(total_rem_r1 / num_inputs)        # Average words after Rnd 1
-        test_name = self.id().split('.')[-1]                           # Test case name
-        test_stop = get_timestamp()                                    # Stop the timer
-        commit_hash = get_commit_hash()                                # Top commit hash
+        test_name = self.id().split('.')[-1]                        # Test case name
+        test_stop = get_timestamp()                                 # Stop the timer
+        commit_hash = get_commit_hash()                             # Top commit hash
+        error_str = '\n' + '\n'.join(errors) if errors else 'None'  # Dynamically build error string
         # Log filename
         log_name = os.path.join(self.test_out,
                                 'test_strategies-' + test_name + '-' + test_stop + '.txt')
         # Format string for the log entry
-        log_entry = """
-TEST START: {start}
+        log_entry = f"""
+TEST START: {self._test_start}
     Commit Hash: {commit_hash}
-    Total Inputs: {num_inputs}
-    Avg Solved: {avg_solved}%
-    Avg Guesses: {avg_guesses}
-    Avg Remaining Guesses (Round 1): {avg_rem_r1}
-    Num Errors: {num_errors}
-    ERRORS: {error_string}
-TEST STOP:  {stop}
+    Total Inputs: {total_stats.total_inputs}
+    Avg Solved: {total_stats.total_solved / total_stats.total_inputs * 100:.3f}%
+    Avg Guesses: {total_stats.total_guesses / total_stats.total_inputs:.3f}
+    Avg Remaining Guesses (Round 1): {total_stats.total_rem_words_1 / total_stats.total_inputs:.3f}
+    Num Errors: {total_stats.total_errors}
+    ERRORS: {error_str}
+TEST STOP:  {test_stop}
         """
-        # Formatted log entry
-        actual_log_entry = log_entry.format(start=self._test_start, commit_hash=commit_hash,
-                                            num_inputs=num_inputs, avg_solved=avg_solved,
-                                            avg_guesses=avg_guesses, avg_rem_r1=avg_rem_r1,
-                                            num_errors=total_errors,
-                                            error_string='\n' + '\n'.join(errors), stop=test_stop)
+        # # Formatted log entry
+        # actual_log_entry = log_entry.format(start=self._test_start, commit_hash=commit_hash,
+        #                                     num_inputs=num_inputs, avg_solved=avg_solved,
+        #                                     avg_guesses=avg_guesses, avg_rem_r1=avg_rem_r1,
+        #                                     num_errors=total_errors,
+        #                                     error_string='\n' + '\n'.join(errors), stop=test_stop)
 
         # LOG IT
         # Print it
-        print(actual_log_entry)
-        with open(log_name, 'w') as out_file:
-            out_file.write(actual_log_entry)
+        print(log_entry)
+        with open(log_name, 'w', encoding=sys.getdefaultencoding()) as out_file:
+            out_file.write(log_entry)
         print(f'Log saved to: {log_name}')
 
+# pylint: disable=too-many-locals
+# Leave me be, Pylint.  It's just test code...
     def replicate_main(self, source: List[str], wordle: str,
                        strategy: TestStrategy) -> TestCaseStats:
         """Replicate main() by simulating a user always choosing the top answer.
@@ -138,7 +147,7 @@ TEST STOP:  {stop}
         unique = True                      # calc_word_ordict() argument
 
         # SETUP
-        if TestStrategy.UNIQUE_TRUE != strategy and TestStrategy.UNIQUE_FIRST != strategy:
+        if strategy not in (TestStrategy.UNIQUE_TRUE, TestStrategy.UNIQUE_FIRST):
             unique = False  # Only the UNIQUE_TRUE and UNIQUE_FIRST strategies start True
 
         # INPUT VALIDATION
@@ -162,13 +171,12 @@ TEST STOP:  {stop}
                     if tmp_guess == wordle:
                         solved = True
                         break  # Guessed it!
-                    else:
-                        word_hints.update_word(tmp_guess, tmp_result)
-                        available_list = remove_word_hints(available_list, word_hints)
+                    word_hints.update_word(tmp_guess, tmp_result)
+                    available_list = remove_word_hints(available_list, word_hints)
                 else:
                     error = True  # No more guesses but it's not solved?!
                     break  # No need to keep guessing because there's no more guesses available
-            except Exception as err:
+            except (IndexError, RuntimeError, TypeError, ValueError) as err:
                 self.log_stderr(f'Encountered an error on round {round_num} for Wordle input '
                                 f'"{wordle.upper()}": {repr(err)}')
                 error = True
@@ -181,8 +189,9 @@ TEST STOP:  {stop}
         # DONE
         return TestCaseStats(num_guesses=num_guesses, solved=solved,
                              rem_words_1=rem_words_1, error=error)
+# pylint: enable=too-many-locals
 
-    def run_test(self, strategy: TestStrategy, source: List[str] = FIVE_LETTER_WORDS) -> None:
+    def run_test(self, strategy: TestStrategy, source: List[str]) -> None:
         """Execute the test case.
 
         This test class will be doing "How many licks to get to the center of a tootsie pop?"
@@ -190,7 +199,7 @@ TEST STOP:  {stop}
 
         Args:
             strategy: Controls how well functions are called.
-            source: Optional; The list of words to test both with and against.
+            source: The list of words to test both with and against.
         """
         # LOCAL VARIABLES
         word_inputs = source   # Test case input
@@ -215,9 +224,12 @@ TEST STOP:  {stop}
                                   f'Wordle "{word_input}"')
 
         # 3. Log the results/stats
-        self.log_stats(num_inputs=len(source), total_guesses=total_guesses,
-                       total_solved=total_solved, total_rem_r1=total_rem_words_1,
-                       total_errors=total_errors, errors=error_list)
+        self.log_stats(TotalTestStats(total_inputs=len(source),
+                                      total_guesses=total_guesses,
+                                      total_solved=total_solved,
+                                      total_rem_words_1=total_rem_words_1,
+                                      total_errors=total_errors),
+                       errors=error_list)
 
 
 class NormalTestStrategies(TestStrategies):
