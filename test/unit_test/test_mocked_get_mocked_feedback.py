@@ -11,6 +11,7 @@ SpecialTestMockedGetMockedFeedback.test_s09_guess_repeats_wordle_twice   # Run t
 
 # Standard Imports
 from typing import Any
+from unittest import skip
 # Third Party Imports
 from test.func_test.mocked import get_mocked_feedback
 from tediousstart.tediousstart import execute_test_cases
@@ -369,19 +370,18 @@ class SpecialTestMockedGetMockedFeedback(TestMockedGetMockedFeedback):
                            exp_results=exp_results)
 
     def test_s10_what_does_wordle_do_here(self):
-        """The guess has a repeating letter found in the wordle once, once in-place and once not.
-
-        ChatGPT says...
-        This follows the official New York Times Wordle rules:
-        🟩 Green – letter is in the correct position.
-        🟨 Yellow – letter is in the word but in the wrong position.
-        ⬛ Gray – letter is not in the word at all or has already been accounted for.
-
-        The key for this test case is... "already been accounted for".
-        """
+        """The guess has a repeating letter found in the wordle once, once in-place and once not."""
         guess_input = 'foody'                        # Test case input: guess
         wordle_input = 'flops'                       # Test case input: wordle
-        exp_results = self.format_results('gy   ')   # Expected results
+        exp_results = self.format_results('g g  ')   # Expected results
+        self.run_test_pass(guess_input=guess_input, wordle_input=wordle_input,
+                           exp_results=exp_results)
+
+    def test_s11_legacy_game_test_20250211(self):
+        """Example Wordle #1333: Round 1."""
+        guess_input = 'booty'                        # Test case input: guess
+        wordle_input = 'score'                       # Test case input: wordle
+        exp_results = self.format_results('  g  ')   # Expected results
         self.run_test_pass(guess_input=guess_input, wordle_input=wordle_input,
                            exp_results=exp_results)
 
