@@ -10,6 +10,10 @@ from typing import Dict, Final, List
 ARCHIVE_URL: Final[str] = 'https://www.rockpapershotgun.com/wordle-past-answers'
 ARCHIVE_NEEDLE: Final[str] = 'All Wordle answers'  # HTML <h2> needle
 
+# CLI ARGUMENT MACROS
+SKIP_ARCHIVE_ARG: Final[str] = 'skip'
+DEBUG_ARG: Final[str] = 'debug'
+
 # INPUT MACROS
 INPUT_GREEN: Final[str] = 'g'.lower()
 INPUT_YELLOW: Final[str] = 'y'.lower()
