@@ -2,7 +2,6 @@
 # Standard
 from typing import Any
 import argparse
-import os
 # Third Party
 # Local
 from well.argvals import ArgVals
@@ -28,7 +27,7 @@ def parse_args() -> ArgVals:
                         help='Ignore past Wordle answers by not loading the archive',
                         required=False)
     parser.add_argument(f'-{DEBUG_ARG[0]}', f'--{DEBUG_ARG}', action='store_true',
-                        help=f'NOT IMPLEMENTED', required=False)
+                        help='NOT IMPLEMENTED', required=False)
 
     # PARSE IT
     args = parser.parse_args()
