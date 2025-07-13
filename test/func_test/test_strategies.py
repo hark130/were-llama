@@ -103,12 +103,6 @@ TEST START: {self._test_start}
     ERRORS: {error_str}
 TEST STOP:  {test_stop}
         """
-        # # Formatted log entry
-        # actual_log_entry = log_entry.format(start=self._test_start, commit_hash=commit_hash,
-        #                                     num_inputs=num_inputs, avg_solved=avg_solved,
-        #                                     avg_guesses=avg_guesses, avg_rem_r1=avg_rem_r1,
-        #                                     num_errors=total_errors,
-        #                                     error_string='\n' + '\n'.join(errors), stop=test_stop)
 
         # LOG IT
         # Print it
