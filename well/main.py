@@ -18,7 +18,7 @@ def main() -> int:
     archive_list = []         # List of previous Wordle answers
     available_list = []       # List of available words
     ord_dict = OrderedDict()  # OrderedDict of word probabilities
-    unique = True             # Only display unique solutions on round 1
+    unique = False            # EDIT: Disabling "first true unique" strategy
     word_hints = WordHints()  # WordHints object
     temp_word = ''            # Word input from user
     temp_result = ''          # Results input from user
