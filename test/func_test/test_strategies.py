@@ -2,9 +2,11 @@
 
     Typical usage example:
 
-    python -m test                            # Run all the test cases
-    python -m test.func_test                  # Run all the functional test cases
-    python -m test.func_test.test_strategies  # Run all of these test cases
+    python -m test                                       # Run all the test cases
+    python -m test.func_test                             # Run all the functional test cases
+    python -m test.func_test.test_strategies             # Run all of these test cases
+    python -m unittest test.func_test.test_strategies.\
+SpecialTestStrategies.test_s01_unique_first_errors       # Run this s01
 """
 
 # Standard Imports
@@ -265,6 +267,12 @@ class BoundaryTestTestStrategies(TestStrategies):
 
 class SpecialTestStrategies(TestStrategies):
     """Special Test Cases."""
+
+    def test_s01_unique_first_errors(self):
+        """Strategy errors from test_n02_unique_first()."""
+        strategy = TestStrategy.UNIQUE_FIRST           # calc_word_ordict(unique=True) on Rnd 1 only
+        source = ['emery', 'erect', 'every', 'exert']  # Starting list of 5-letter words
+        self.run_test(strategy=strategy, source=source)
 
 
 if __name__ == '__main__':
