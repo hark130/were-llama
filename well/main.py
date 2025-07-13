@@ -33,6 +33,11 @@ def main() -> int:
     while True:
         # A. Calculate probability of remaining words
         ord_dict = calc_word_ordict(available_list, unique=unique)
+        if not ord_dict:
+            print('Something has gone wrong.  There are no more available guesses.\n'
+                  'Perhaps a typo (or a BUG).')
+            result = 1
+            break  # No more guesses, so no need to continue
         unique = False
         print(f'TOP GUESSES ({len(ord_dict)} remaining): {", ".join(list(ord_dict.keys())[:10])}')
         try:
