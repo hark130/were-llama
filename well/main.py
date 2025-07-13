@@ -6,6 +6,7 @@ from collections import OrderedDict
 # Local Imports
 from well.archive import get_past_answers
 from well.globals import FIVE_LETTER_WORDS, INPUT_GREEN
+from well.parse_args import use_archive
 from well.prompt import get_feedback
 from well.word_hints import WordHints
 from well.words import calc_word_ordict, CountError, remove_word_hints, remove_words
@@ -24,11 +25,14 @@ def main() -> int:
     temp_result = ''          # Results input from user
 
     # DO IT
-    # 1. Read the archive
-    archive_list = get_past_answers()
-    # 2. Retrieve dictionary words
-    # 3. Remove archive words
-    available_list = remove_words(FIVE_LETTER_WORDS, archive_list)
+    if use_archive():
+        # 1. Read the archive
+        archive_list = get_past_answers()
+        # 2. Retrieve dictionary words
+        # 3. Remove archive words
+        available_list = remove_words(FIVE_LETTER_WORDS, archive_list)
+    else:
+        available_list = FIVE_LETTER_WORDS
     # 4. Interact
     while True:
         # A. Calculate probability of remaining words
