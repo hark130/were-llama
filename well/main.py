@@ -9,7 +9,7 @@ from well.globals import FIVE_LETTER_WORDS, INPUT_GREEN
 from well.parse_args import use_archive
 from well.prompt import get_feedback
 from well.word_hints import WordHints
-from well.words import calc_word_ordict, CountError, remove_word_hints, remove_words
+from well.words import calc_word_ordict, remove_word_hints, remove_words
 
 
 def main() -> int:
@@ -36,7 +36,7 @@ def main() -> int:
     # 4. Interact
     while True:
         # A. Calculate probability of remaining words
-        ord_dict = calc_word_ordict(available_list, unique=unique)
+        ord_dict = calc_word_ordict(available_list, dupe_weight=1.0)
         if not ord_dict:
             print('Something has gone wrong.  There are no more available guesses.\n'
                   'Perhaps a typo (or a BUG).')
@@ -53,7 +53,7 @@ def main() -> int:
             word_hints.update_word(temp_word, temp_result)
             # C. Remove invalid words
             available_list = remove_word_hints(available_list, word_hints)
-        except (CountError, RuntimeError) as err:
+        except RuntimeError as err:
             print(f'Error encountered: {repr(err)}')
             print('Exiting.\n')
             result = 1
