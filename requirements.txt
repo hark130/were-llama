@@ -1,0 +1,4 @@
+# Python package requirements for WELL
+
+beautifulsoup4>=4.0.0
+requests>=2.0.0

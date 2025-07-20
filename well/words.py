@@ -3,6 +3,7 @@
 # Standard Imports
 from collections import OrderedDict
 from typing import Dict, List
+from typing import OrderedDict as TypingOrderedDict  # TypeError: 'type' object is not subscriptable
 # Third Party Imports
 # Local Imports
 from well.globals import REL_START_FREQ, REL_WORD_FREQ
@@ -44,7 +45,7 @@ def calc_word_list(words: List[str], unique: bool = False) -> Dict[str, int]:
     return prob_dict
 
 
-def calc_word_ordict(words: List[str], unique: bool = False) -> OrderedDict[str, int]:
+def calc_word_ordict(words: List[str], unique: bool = False) -> TypingOrderedDict[str, int]:
     """Calculate likelihood for a list of words into a dict sort by descending probability.
 
     Args:
