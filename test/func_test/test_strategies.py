@@ -7,6 +7,8 @@
     python -m test.func_test.test_strategies             # Run all of these test cases
     python -m unittest test.func_test.test_strategies.\
 SpecialTestStrategies.test_s01_unique_first_errors       # Run this s01
+    python -m unittest test.func_test.test_strategies.\
+NormalTestStrategies.test_n04_start_weight_10_percent    # Run this n04
 """
 
 # Standard Imports
@@ -26,6 +28,7 @@ from tediousstart.tediousstart import execute_test_cases, TediousStart
 from well.globals import FIVE_LETTER_WORDS
 from well.word_hints import WordHints
 from well.words import calc_word_ordict, remove_word_hints
+from well.strategy import determine_dupe_weight
 
 
 @dataclass
@@ -49,9 +52,19 @@ class TotalTestStats:
 
 class TestStrategy(IntEnum):
     """Communicate the desired test case strategy."""
-    UNIQUE_FALSE = auto()  # calc_word_ordict(unique=False)
-    UNIQUE_FIRST = auto()  # calc_word_ordict(unique=True) on Round 1 only
-    UNIQUE_TRUE = auto()   # calc_word_ordict(unique=True)
+    UNIQUE_FALSE = auto()  # calc_word_ordict(unique=False)                 # OBE WELL-4 Refactor
+    UNIQUE_FIRST = auto()  # calc_word_ordict(unique=True) on Round 1 only  # OBE WELL-4 Refactor
+    UNIQUE_TRUE = auto()   # calc_word_ordict(unique=True)                  # OBE WELL-4 Refactor
+    STRT_WGT_010 = auto()  # determine_dupe_weight(start_weight=0.10)
+    STRT_WGT_020 = auto()  # determine_dupe_weight(start_weight=0.20)
+    STRT_WGT_030 = auto()  # determine_dupe_weight(start_weight=0.30)
+    STRT_WGT_040 = auto()  # determine_dupe_weight(start_weight=0.40)
+    STRT_WGT_050 = auto()  # determine_dupe_weight(start_weight=0.50)
+    STRT_WGT_060 = auto()  # determine_dupe_weight(start_weight=0.60)
+    STRT_WGT_070 = auto()  # determine_dupe_weight(start_weight=0.70)
+    STRT_WGT_080 = auto()  # determine_dupe_weight(start_weight=0.80)
+    STRT_WGT_090 = auto()  # determine_dupe_weight(start_weight=0.90)
+    STRT_WGT_100 = auto()  # determine_dupe_weight(start_weight=1.00)
 
 
 class TestStrategies(TediousStart):
@@ -77,6 +90,38 @@ class TestStrategies(TediousStart):
 
     # HELPER METHODS
     # Methods listed in alphabetical order
+    def convert_start_weight(self, strategy: TestStrategy) -> float:
+        """Convert the TestStrategy enum to a start_weight float value."""
+        # LOCAL VARIABLES
+        start_weight = 1.0  # Converted start_weight
+
+        # INPUT VALIDATION
+        self._validate_type(validate_this=strategy, param_name='strategy', param_type=TestStrategy)
+
+        # CONVERT IT
+        match strategy:
+            case TestStrategy.STRT_WGT_010:
+                start_weight = 0.10
+            case TestStrategy.STRT_WGT_020:
+                start_weight = 0.20
+            case TestStrategy.STRT_WGT_030:
+                start_weight = 0.30
+            case TestStrategy.STRT_WGT_040:
+                start_weight = 0.40
+            case TestStrategy.STRT_WGT_050:
+                start_weight = 0.50
+            case TestStrategy.STRT_WGT_060:
+                start_weight = 0.60
+            case TestStrategy.STRT_WGT_070:
+                start_weight = 0.70
+            case TestStrategy.STRT_WGT_080:
+                start_weight = 0.80
+            case TestStrategy.STRT_WGT_090:
+                start_weight = 0.90
+
+        # DONE
+        return start_weight
+
     def log_stderr(self, msg: str) -> None:
         """Log an error to stderr without failing the test case."""
         print(self._test_error.format(str(msg)), file=sys.stderr)
@@ -102,7 +147,7 @@ TEST START: {self._test_start}
     Num Errors: {total_stats.total_errors}
     ERRORS: {error_str}
 TEST STOP:  {test_stop}
-        """
+        \n"""
 
         # LOG IT
         # Print it
@@ -141,10 +186,14 @@ TEST STOP:  {test_stop}
         tmp_guess = ''                     # Top guess from temp_ord_dict
         tmp_result = ''                    # Mocked user feedback results
         unique = True                      # calc_word_ordict() argument
+        start_weight = 1.0                 # The start_weight value for this test case
+        dupe_weight = start_weight         # The current dupe_weight value for this test case
 
         # SETUP
-        if strategy not in (TestStrategy.UNIQUE_TRUE, TestStrategy.UNIQUE_FIRST):
-            unique = False  # Only the UNIQUE_TRUE and UNIQUE_FIRST strategies start True
+        if strategy in (TestStrategy.UNIQUE_FALSE, TestStrategy.UNIQUE_FIRST,
+                        TestStrategy.UNIQUE_TRUE):
+            self.fail_test_case('Unsupported strategy')
+        start_weight = self.convert_start_weight(strategy)
 
         # INPUT VALIDATION
         if wordle.lower() != wordle:
@@ -155,9 +204,8 @@ TEST STOP:  {test_stop}
         # REPLICATE IT
         while True:
             try:
-                if TestStrategy.UNIQUE_FIRST == strategy and round_num != 1:
-                    unique = False  # UNIQUE_FIRST only uses unique=True on Round 1
-                tmp_ord_dict = calc_word_ordict(available_list, unique=unique)
+                dupe_weight = determine_dupe_weight(word_hint=word_hints, start_weight=start_weight)
+                tmp_ord_dict = calc_word_ordict(available_list, dupe_weight=dupe_weight)
                 if tmp_ord_dict:
                     if 1 == round_num:
                         rem_words_1 = len(tmp_ord_dict)  # Store it ASAP
@@ -231,23 +279,85 @@ TEST STOP:  {test_stop}
 class NormalTestStrategies(TestStrategies):
     """Normal Test Cases."""
 
+    @skip('This test was broken on WELL-4 during a refactor')
     def test_n01_unique_false(self):
         """calc_word_ordict(unique=False)."""
         strategy = TestStrategy.UNIQUE_FALSE  # calc_word_ordict(unique=False)
         source = FIVE_LETTER_WORDS            # Starting list of 5-letter words
         self.run_test(strategy=strategy, source=source)
 
+    @skip('This test was broken on WELL-4 during a refactor')
     def test_n02_unique_first(self):
         """calc_word_ordict(unique=True) on Round 1 only."""
         strategy = TestStrategy.UNIQUE_FIRST  # calc_word_ordict(unique=True) on Round 1 only
         source = FIVE_LETTER_WORDS            # Starting list of 5-letter words
         self.run_test(strategy=strategy, source=source)
 
-    @skip('This test is causing a plethora of errors... which is fine becuase it is not viable')
+    @skip('This test is causing a plethora of errors... which is fine because it is not viable')
     def test_n03_unique_true(self):
         """calc_word_ordict(unique=True)."""
         strategy = TestStrategy.UNIQUE_TRUE  # calc_word_ordict(unique=True)
         source = FIVE_LETTER_WORDS           # Starting list of 5-letter words
+        self.run_test(strategy=strategy, source=source)
+
+    def test_n04_start_weight_10_percent(self):
+        """Start weight value is 10%."""
+        strategy = TestStrategy.STRT_WGT_010  # determine_dupe_weight(start_weight)
+        source = FIVE_LETTER_WORDS            # Starting list of 5-letter words
+        self.run_test(strategy=strategy, source=source)
+
+    def test_n05_start_weight_20_percent(self):
+        """Start weight value is 20%."""
+        strategy = TestStrategy.STRT_WGT_020  # determine_dupe_weight(start_weight)
+        source = FIVE_LETTER_WORDS            # Starting list of 5-letter words
+        self.run_test(strategy=strategy, source=source)
+
+    def test_n06_start_weight_30_percent(self):
+        """Start weight value is 30%."""
+        strategy = TestStrategy.STRT_WGT_030  # determine_dupe_weight(start_weight)
+        source = FIVE_LETTER_WORDS            # Starting list of 5-letter words
+        self.run_test(strategy=strategy, source=source)
+
+    def test_n07_start_weight_40_percent(self):
+        """Start weight value is 40%."""
+        strategy = TestStrategy.STRT_WGT_040  # determine_dupe_weight(start_weight)
+        source = FIVE_LETTER_WORDS            # Starting list of 5-letter words
+        self.run_test(strategy=strategy, source=source)
+
+    def test_n08_start_weight_50_percent(self):
+        """Start weight value is 50%."""
+        strategy = TestStrategy.STRT_WGT_050  # determine_dupe_weight(start_weight)
+        source = FIVE_LETTER_WORDS            # Starting list of 5-letter words
+        self.run_test(strategy=strategy, source=source)
+
+    def test_n09_start_weight_60_percent(self):
+        """Start weight value is 60%."""
+        strategy = TestStrategy.STRT_WGT_060  # determine_dupe_weight(start_weight)
+        source = FIVE_LETTER_WORDS            # Starting list of 5-letter words
+        self.run_test(strategy=strategy, source=source)
+
+    def test_n10_start_weight_70_percent(self):
+        """Start weight value is 70%."""
+        strategy = TestStrategy.STRT_WGT_070  # determine_dupe_weight(start_weight)
+        source = FIVE_LETTER_WORDS            # Starting list of 5-letter words
+        self.run_test(strategy=strategy, source=source)
+
+    def test_n11_start_weight_80_percent(self):
+        """Start weight value is 80%."""
+        strategy = TestStrategy.STRT_WGT_080  # determine_dupe_weight(start_weight)
+        source = FIVE_LETTER_WORDS            # Starting list of 5-letter words
+        self.run_test(strategy=strategy, source=source)
+
+    def test_n12_start_weight_90_percent(self):
+        """Start weight value is 90%."""
+        strategy = TestStrategy.STRT_WGT_090  # determine_dupe_weight(start_weight)
+        source = FIVE_LETTER_WORDS            # Starting list of 5-letter words
+        self.run_test(strategy=strategy, source=source)
+
+    def test_n13_start_weight_100_percent(self):
+        """Start weight value is 100%."""
+        strategy = TestStrategy.STRT_WGT_100  # determine_dupe_weight(start_weight)
+        source = FIVE_LETTER_WORDS            # Starting list of 5-letter words
         self.run_test(strategy=strategy, source=source)
 
 
@@ -262,6 +372,7 @@ class BoundaryTestTestStrategies(TestStrategies):
 class SpecialTestStrategies(TestStrategies):
     """Special Test Cases."""
 
+    @skip('This test was broken on WELL-4 during a refactor')
     def test_s01_unique_first_errors(self):
         """Strategy errors from test_n02_unique_first()."""
         strategy = TestStrategy.UNIQUE_FIRST           # calc_word_ordict(unique=True) on Rnd 1 only
