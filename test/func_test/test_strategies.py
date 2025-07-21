@@ -255,61 +255,61 @@ class NormalTestStrategies(TestStrategies):
         """Start weight value is 10%."""
         source = FIVE_LETTER_WORDS               # Starting list of 5-letter words
         self.set_start_weight(start_weight=0.1)  # determine_dupe_weight(start_weight)
-        self.run_test(strategy=strategy, source=source)
+        self.run_test(source=source)
 
     def test_n05_start_weight_20_percent(self):
         """Start weight value is 20%."""
         source = FIVE_LETTER_WORDS               # Starting list of 5-letter words
         self.set_start_weight(start_weight=0.2)  # determine_dupe_weight(start_weight)
-        self.run_test(strategy=strategy, source=source)
+        self.run_test(source=source)
 
     def test_n06_start_weight_30_percent(self):
         """Start weight value is 30%."""
         source = FIVE_LETTER_WORDS               # Starting list of 5-letter words
         self.set_start_weight(start_weight=0.3)  # determine_dupe_weight(start_weight)
-        self.run_test(strategy=strategy, source=source)
+        self.run_test(source=source)
 
     def test_n07_start_weight_40_percent(self):
         """Start weight value is 40%."""
         source = FIVE_LETTER_WORDS               # Starting list of 5-letter words
         self.set_start_weight(start_weight=0.4)  # determine_dupe_weight(start_weight)
-        self.run_test(strategy=strategy, source=source)
+        self.run_test(source=source)
 
     def test_n08_start_weight_50_percent(self):
         """Start weight value is 50%."""
         source = FIVE_LETTER_WORDS               # Starting list of 5-letter words
         self.set_start_weight(start_weight=0.5)  # determine_dupe_weight(start_weight)
-        self.run_test(strategy=strategy, source=source)
+        self.run_test(source=source)
 
     def test_n09_start_weight_60_percent(self):
         """Start weight value is 60%."""
         source = FIVE_LETTER_WORDS               # Starting list of 5-letter words
         self.set_start_weight(start_weight=0.6)  # determine_dupe_weight(start_weight)
-        self.run_test(strategy=strategy, source=source)
+        self.run_test(source=source)
 
     def test_n10_start_weight_70_percent(self):
         """Start weight value is 70%."""
         source = FIVE_LETTER_WORDS               # Starting list of 5-letter words
         self.set_start_weight(start_weight=0.7)  # determine_dupe_weight(start_weight)
-        self.run_test(strategy=strategy, source=source)
+        self.run_test(source=source)
 
     def test_n11_start_weight_80_percent(self):
         """Start weight value is 80%."""
         source = FIVE_LETTER_WORDS               # Starting list of 5-letter words
         self.set_start_weight(start_weight=0.8)  # determine_dupe_weight(start_weight)
-        self.run_test(strategy=strategy, source=source)
+        self.run_test(source=source)
 
     def test_n12_start_weight_90_percent(self):
         """Start weight value is 90%."""
         source = FIVE_LETTER_WORDS               # Starting list of 5-letter words
         self.set_start_weight(start_weight=0.9)  # determine_dupe_weight(start_weight)
-        self.run_test(strategy=strategy, source=source)
+        self.run_test(source=source)
 
     def test_n13_start_weight_100_percent(self):
         """Start weight value is 100%."""
         source = FIVE_LETTER_WORDS               # Starting list of 5-letter words
         self.set_start_weight(start_weight=1.0)  # determine_dupe_weight(start_weight)
-        self.run_test(strategy=strategy, source=source)
+        self.run_test(source=source)
 
     def test_n14_start_weight_45_percent(self):
         """Start weight value is 45%."""
