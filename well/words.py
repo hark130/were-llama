@@ -7,6 +7,7 @@ from typing import OrderedDict as TypingOrderedDict  # TypeError: 'type' object 
 # Third Party Imports
 # Local Imports
 from well.globals import REL_START_FREQ, REL_WORD_FREQ
+from well.validation import validate_percent, validate_word
 from well.word_hints import WordHints
 
 
@@ -23,12 +24,8 @@ def calc_word(word: str, dupe_weight: float = 1.0) -> int:
     prob = REL_START_FREQ[word[0].lower()]  # Calculated value
 
     # INPUT VALIDATION
-    if not isinstance(dupe_weight, float):
-        raise TypeError(f'Invalid type for "dupe_weight": {type(dupe_weight)}')
-    elif dupe_weight > 1.0:
-        raise ValueError('The "dupe_weight" value may not be greater than 100%')
-    elif dupe_weight < 0.0:
-        raise ValueError('The "dupe_weight" value may not be less than 0%')
+    validate_word(word=word, name='word')  # Length will be validated below
+    validate_percent(percent=dupe_weight, name='dupe_weight')
 
     # CALC IT
     for letter in word:

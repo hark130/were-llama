@@ -3,6 +3,7 @@
 # Standard Imports
 # Third Party Imports
 # Local Imports
+from well.validation import validate_string
 
 
 class LetterHints():
@@ -61,8 +62,7 @@ class LetterHints():
             TypeError: Bad type.
             ValueError: Non-lowercase letter, non-alphabet character, or bad string length.
         """
-        if not isinstance(letter, str):
-            raise TypeError(f'"{letter}" must be a string instead of a {type(letter)}')
+        validate_string(letter, 'letter', can_be_empty=True)  # Length is validated below
         if 1 != len(letter):
             raise ValueError(f'"{letter}" is not a single character!')
         if letter.lower() != letter:
