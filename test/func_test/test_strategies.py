@@ -50,23 +50,6 @@ class TotalTestStats:
     total_errors: int       # Communicate an internal error (e.g., 0 guesses left) for logging)
 
 
-class TestStrategy(IntEnum):
-    """Communicate the desired test case strategy."""
-    UNIQUE_FALSE = auto()  # calc_word_ordict(unique=False)                 # OBE WELL-4 Refactor
-    UNIQUE_FIRST = auto()  # calc_word_ordict(unique=True) on Round 1 only  # OBE WELL-4 Refactor
-    UNIQUE_TRUE = auto()   # calc_word_ordict(unique=True)                  # OBE WELL-4 Refactor
-    STRT_WGT_010 = auto()  # determine_dupe_weight(start_weight=0.10)
-    STRT_WGT_020 = auto()  # determine_dupe_weight(start_weight=0.20)
-    STRT_WGT_030 = auto()  # determine_dupe_weight(start_weight=0.30)
-    STRT_WGT_040 = auto()  # determine_dupe_weight(start_weight=0.40)
-    STRT_WGT_050 = auto()  # determine_dupe_weight(start_weight=0.50)
-    STRT_WGT_060 = auto()  # determine_dupe_weight(start_weight=0.60)
-    STRT_WGT_070 = auto()  # determine_dupe_weight(start_weight=0.70)
-    STRT_WGT_080 = auto()  # determine_dupe_weight(start_weight=0.80)
-    STRT_WGT_090 = auto()  # determine_dupe_weight(start_weight=0.90)
-    STRT_WGT_100 = auto()  # determine_dupe_weight(start_weight=1.00)
-
-
 class TestStrategies(TediousStart):
     """WERE LLAMA (WELL) Strategy test class."""
 
@@ -75,6 +58,7 @@ class TestStrategies(TediousStart):
     def __init__(self, *args, **kwargs) -> None:
         """TestStrategies ctor."""
         super().__init__(*args, **kwargs)
+        self.test_start_weight = 1.0  # Test case start weight
         self.test_in = os.path.join(os.getcwd(), 'test', 'func_test', 'test_input')
         self.test_out = os.path.join(os.getcwd(), 'test', 'func_test', 'test_output')
         self._test_start = get_timestamp()
@@ -90,37 +74,13 @@ class TestStrategies(TediousStart):
 
     # HELPER METHODS
     # Methods listed in alphabetical order
-    def convert_start_weight(self, strategy: TestStrategy) -> float:
+    def set_start_weight(self, start_weight: float):
         """Convert the TestStrategy enum to a start_weight float value."""
-        # LOCAL VARIABLES
-        start_weight = 1.0  # Converted start_weight
-
         # INPUT VALIDATION
-        self._validate_type(validate_this=strategy, param_name='strategy', param_type=TestStrategy)
+        self._validate_type(validate_this=start_weight, param_name='start_weight', param_type=float)
 
-        # CONVERT IT
-        match strategy:
-            case TestStrategy.STRT_WGT_010:
-                start_weight = 0.10
-            case TestStrategy.STRT_WGT_020:
-                start_weight = 0.20
-            case TestStrategy.STRT_WGT_030:
-                start_weight = 0.30
-            case TestStrategy.STRT_WGT_040:
-                start_weight = 0.40
-            case TestStrategy.STRT_WGT_050:
-                start_weight = 0.50
-            case TestStrategy.STRT_WGT_060:
-                start_weight = 0.60
-            case TestStrategy.STRT_WGT_070:
-                start_weight = 0.70
-            case TestStrategy.STRT_WGT_080:
-                start_weight = 0.80
-            case TestStrategy.STRT_WGT_090:
-                start_weight = 0.90
-
-        # DONE
-        return start_weight
+        # SET IT
+        self.test_start_weight = start_weight
 
     def log_stderr(self, msg: str) -> None:
         """Log an error to stderr without failing the test case."""
@@ -158,8 +118,7 @@ TEST STOP:  {test_stop}
 
 # pylint: disable=too-many-locals
 # Leave me be, Pylint.  It's just test code...
-    def replicate_main(self, source: List[str], wordle: str,
-                       strategy: TestStrategy) -> TestCaseStats:
+    def replicate_main(self, source: List[str], wordle: str) -> TestCaseStats:
         """Replicate main() by simulating a user always choosing the top answer.
 
         Args:
@@ -175,25 +134,19 @@ TEST STOP:  {test_stop}
             TestCaseStats.error will be set to True.
         """
         # LOCAL VARIABLES
-        word_hints = WordHints()           # WordHints() object
-        available_list = deepcopy(source)  # A deep copy of the source list
-        num_guesses = 0                    # TestCaseStats.num_guesses
-        solved = False                     # TestCaseStats.solved
-        rem_words_1 = 0                    # TestCaseStats.rem_words_1
-        error = False                      # TestCaseStats.error
-        round_num = 1                      # Keep track of the round
-        tmp_ord_dict = OrderedDict()       # Temp OrderedDict from calc_word_ordict()
-        tmp_guess = ''                     # Top guess from temp_ord_dict
-        tmp_result = ''                    # Mocked user feedback results
-        unique = True                      # calc_word_ordict() argument
-        start_weight = 1.0                 # The start_weight value for this test case
-        dupe_weight = start_weight         # The current dupe_weight value for this test case
-
-        # SETUP
-        if strategy in (TestStrategy.UNIQUE_FALSE, TestStrategy.UNIQUE_FIRST,
-                        TestStrategy.UNIQUE_TRUE):
-            self.fail_test_case('Unsupported strategy')
-        start_weight = self.convert_start_weight(strategy)
+        word_hints = WordHints()               # WordHints() object
+        available_list = deepcopy(source)      # A deep copy of the source list
+        num_guesses = 0                        # TestCaseStats.num_guesses
+        solved = False                         # TestCaseStats.solved
+        rem_words_1 = 0                        # TestCaseStats.rem_words_1
+        error = False                          # TestCaseStats.error
+        round_num = 1                          # Keep track of the round
+        tmp_ord_dict = OrderedDict()           # Temp OrderedDict from calc_word_ordict()
+        tmp_guess = ''                         # Top guess from temp_ord_dict
+        tmp_result = ''                        # Mocked user feedback results
+        unique = True                          # calc_word_ordict() argument
+        start_weight = self.test_start_weight  # The start_weight value for this test case
+        dupe_weight = start_weight             # The current dupe_weight value for this test case
 
         # INPUT VALIDATION
         if wordle.lower() != wordle:
@@ -235,14 +188,13 @@ TEST STOP:  {test_stop}
                              rem_words_1=rem_words_1, error=error)
 # pylint: enable=too-many-locals
 
-    def run_test(self, strategy: TestStrategy, source: List[str]) -> None:
+    def run_test(self, source: List[str]) -> None:
         """Execute the test case.
 
         This test class will be doing "How many licks to get to the center of a tootsie pop?"
         trials between different strategies.
 
         Args:
-            strategy: Controls how well functions are called.
             source: The list of words to test both with and against.
         """
         # LOCAL VARIABLES
@@ -256,8 +208,7 @@ TEST STOP:  {test_stop}
 
         # 2. For each word
         for word_input in word_inputs:
-            temp_stats = self.replicate_main(source=FIVE_LETTER_WORDS, wordle=word_input,
-                                             strategy=strategy)
+            temp_stats = self.replicate_main(source=FIVE_LETTER_WORDS, wordle=word_input)
             total_guesses += temp_stats.num_guesses
             if temp_stats.solved:
                 total_solved += 1
@@ -302,63 +253,103 @@ class NormalTestStrategies(TestStrategies):
 
     def test_n04_start_weight_10_percent(self):
         """Start weight value is 10%."""
-        strategy = TestStrategy.STRT_WGT_010  # determine_dupe_weight(start_weight)
-        source = FIVE_LETTER_WORDS            # Starting list of 5-letter words
+        source = FIVE_LETTER_WORDS               # Starting list of 5-letter words
+        self.set_start_weight(start_weight=0.1)  # determine_dupe_weight(start_weight)
         self.run_test(strategy=strategy, source=source)
 
     def test_n05_start_weight_20_percent(self):
         """Start weight value is 20%."""
-        strategy = TestStrategy.STRT_WGT_020  # determine_dupe_weight(start_weight)
-        source = FIVE_LETTER_WORDS            # Starting list of 5-letter words
+        source = FIVE_LETTER_WORDS               # Starting list of 5-letter words
+        self.set_start_weight(start_weight=0.2)  # determine_dupe_weight(start_weight)
         self.run_test(strategy=strategy, source=source)
 
     def test_n06_start_weight_30_percent(self):
         """Start weight value is 30%."""
-        strategy = TestStrategy.STRT_WGT_030  # determine_dupe_weight(start_weight)
-        source = FIVE_LETTER_WORDS            # Starting list of 5-letter words
+        source = FIVE_LETTER_WORDS               # Starting list of 5-letter words
+        self.set_start_weight(start_weight=0.3)  # determine_dupe_weight(start_weight)
         self.run_test(strategy=strategy, source=source)
 
     def test_n07_start_weight_40_percent(self):
         """Start weight value is 40%."""
-        strategy = TestStrategy.STRT_WGT_040  # determine_dupe_weight(start_weight)
-        source = FIVE_LETTER_WORDS            # Starting list of 5-letter words
+        source = FIVE_LETTER_WORDS               # Starting list of 5-letter words
+        self.set_start_weight(start_weight=0.4)  # determine_dupe_weight(start_weight)
         self.run_test(strategy=strategy, source=source)
 
     def test_n08_start_weight_50_percent(self):
         """Start weight value is 50%."""
-        strategy = TestStrategy.STRT_WGT_050  # determine_dupe_weight(start_weight)
-        source = FIVE_LETTER_WORDS            # Starting list of 5-letter words
+        source = FIVE_LETTER_WORDS               # Starting list of 5-letter words
+        self.set_start_weight(start_weight=0.5)  # determine_dupe_weight(start_weight)
         self.run_test(strategy=strategy, source=source)
 
     def test_n09_start_weight_60_percent(self):
         """Start weight value is 60%."""
-        strategy = TestStrategy.STRT_WGT_060  # determine_dupe_weight(start_weight)
-        source = FIVE_LETTER_WORDS            # Starting list of 5-letter words
+        source = FIVE_LETTER_WORDS               # Starting list of 5-letter words
+        self.set_start_weight(start_weight=0.6)  # determine_dupe_weight(start_weight)
         self.run_test(strategy=strategy, source=source)
 
     def test_n10_start_weight_70_percent(self):
         """Start weight value is 70%."""
-        strategy = TestStrategy.STRT_WGT_070  # determine_dupe_weight(start_weight)
-        source = FIVE_LETTER_WORDS            # Starting list of 5-letter words
+        source = FIVE_LETTER_WORDS               # Starting list of 5-letter words
+        self.set_start_weight(start_weight=0.7)  # determine_dupe_weight(start_weight)
         self.run_test(strategy=strategy, source=source)
 
     def test_n11_start_weight_80_percent(self):
         """Start weight value is 80%."""
-        strategy = TestStrategy.STRT_WGT_080  # determine_dupe_weight(start_weight)
-        source = FIVE_LETTER_WORDS            # Starting list of 5-letter words
+        source = FIVE_LETTER_WORDS               # Starting list of 5-letter words
+        self.set_start_weight(start_weight=0.8)  # determine_dupe_weight(start_weight)
         self.run_test(strategy=strategy, source=source)
 
     def test_n12_start_weight_90_percent(self):
         """Start weight value is 90%."""
-        strategy = TestStrategy.STRT_WGT_090  # determine_dupe_weight(start_weight)
-        source = FIVE_LETTER_WORDS            # Starting list of 5-letter words
+        source = FIVE_LETTER_WORDS               # Starting list of 5-letter words
+        self.set_start_weight(start_weight=0.9)  # determine_dupe_weight(start_weight)
         self.run_test(strategy=strategy, source=source)
 
     def test_n13_start_weight_100_percent(self):
         """Start weight value is 100%."""
-        strategy = TestStrategy.STRT_WGT_100  # determine_dupe_weight(start_weight)
-        source = FIVE_LETTER_WORDS            # Starting list of 5-letter words
+        source = FIVE_LETTER_WORDS               # Starting list of 5-letter words
+        self.set_start_weight(start_weight=1.0)  # determine_dupe_weight(start_weight)
         self.run_test(strategy=strategy, source=source)
+
+    def test_n14_start_weight_45_percent(self):
+        """Start weight value is 45%."""
+        source = FIVE_LETTER_WORDS                # Starting list of 5-letter words
+        self.set_start_weight(start_weight=0.45)  # determine_dupe_weight(start_weight)
+        self.run_test(source=source)
+
+    def test_n15_start_weight_55_percent(self):
+        """Start weight value is 55%."""
+        source = FIVE_LETTER_WORDS                # Starting list of 5-letter words
+        self.set_start_weight(start_weight=0.55)  # determine_dupe_weight(start_weight)
+        self.run_test(source=source)
+
+
+    def test_n16_start_weight_41_percent(self):
+        """Start weight value is 41%."""
+        source = FIVE_LETTER_WORDS                # Starting list of 5-letter words
+        self.set_start_weight(start_weight=0.55)  # determine_dupe_weight(start_weight)
+        self.run_test(source=source)
+
+
+    def test_n17_start_weight_42_percent(self):
+        """Start weight value is 42%."""
+        source = FIVE_LETTER_WORDS                # Starting list of 5-letter words
+        self.set_start_weight(start_weight=0.55)  # determine_dupe_weight(start_weight)
+        self.run_test(source=source)
+
+
+    def test_n18_start_weight_43_percent(self):
+        """Start weight value is 43%."""
+        source = FIVE_LETTER_WORDS                # Starting list of 5-letter words
+        self.set_start_weight(start_weight=0.55)  # determine_dupe_weight(start_weight)
+        self.run_test(source=source)
+
+
+    def test_n19_start_weight_44_percent(self):
+        """Start weight value is 44%."""
+        source = FIVE_LETTER_WORDS                # Starting list of 5-letter words
+        self.set_start_weight(start_weight=0.55)  # determine_dupe_weight(start_weight)
+        self.run_test(source=source)
 
 
 class ErrorTestStrategies(TestStrategies):
