@@ -63,6 +63,20 @@ class WordHints():
         # DONE
         return valid
 
+    def count_known(self) -> int:
+        """Count the number of known letters (solved + must_haves)."""
+        # LOCAL VARIABLES
+        count = 0  # Running count
+
+        # COUNT IT
+        for letter_hint in self.word:
+            if letter_hint.is_solved():
+                count += 1
+        count += len(self._must_haves)
+
+        # DONE
+        return count
+
     def exclude_letter(self, letter: str, skip: LetterIndex = None) -> None:
         """Add an excluded letter to all letters except the skip index.
 
