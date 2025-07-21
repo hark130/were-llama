@@ -82,42 +82,42 @@ class NormalTestWordHintsCountKnown(TestWordHintsCountKnown):
 
     def test_n01_round_1(self):
         """New WordHints object."""
-        updates = None         # Pre-call input to WordHints().update_word()
+        updates = None   # Pre-call input to WordHints().update_word()
         exp_results = 0  # Expected results
         self.run_test_pass(updates=updates, exp_results=exp_results)
 
-    def test_n02_round_2_true(self):
-        """Round 2 results: guess passes check."""
+    def test_n02_round_2(self):
+        """Round 2 results."""
         # Pre-call input to WordHints().update_word()
         updates = [UserFeedback('beast', 'gggy ')]  # beans
         exp_results = 4  # Expected results
         self.run_test_pass(updates=updates, exp_results=exp_results)
 
-    def test_n03_round_3_true(self):
-        """Round 3 results: guess passes check."""
+    def test_n03_round_3(self):
+        """Round 3 results."""
         # Pre-call input to WordHints().update_word()
         updates = [UserFeedback('below', 'gg   '), UserFeedback('beast', 'gggy ')]  # beans
         exp_results = 4  # Expected results
         self.run_test_pass(updates=updates, exp_results=exp_results)
 
-    def test_n04_round_4_true(self):
-        """Round 4 results: guess passes check."""
+    def test_n04_round_4(self):
+        """Round 4 results."""
         # Pre-call input to WordHints().update_word()
         updates = [UserFeedback('zzzzz', '     '), UserFeedback('below', 'gg   '),
                    UserFeedback('beast', 'gggy ')]  # beans
         exp_results = 4  # Expected results
         self.run_test_pass(updates=updates, exp_results=exp_results)
 
-    def test_n05_round_5_true(self):
-        """Round 5 results: guess passes check."""
+    def test_n05_round_5(self):
+        """Round 5 results."""
         # Pre-call input to WordHints().update_word()
         updates = [UserFeedback('vwxyz', '     '), UserFeedback('qrstu', '  y  '),
                    UserFeedback('beast', 'gggy '), UserFeedback('below', 'gg   ')]  # beans
         exp_results = 4  # Expected results
         self.run_test_pass(updates=updates, exp_results=exp_results)
 
-    def test_n06_round_6_true(self):
-        """Round 6 results: guess passes check."""
+    def test_n06_round_6(self):
+        """Round 6 results."""
         # Pre-call input to WordHints().update_word()
         updates = [UserFeedback('vwxyz', '     '), UserFeedback('qrstu', '  y  '),
                    UserFeedback('beast', 'gggy '), UserFeedback('below', 'gg   '),
@@ -125,38 +125,38 @@ class NormalTestWordHintsCountKnown(TestWordHintsCountKnown):
         exp_results = 5  # Expected results
         self.run_test_pass(updates=updates, exp_results=exp_results)
 
-    def test_n07_round_2_false(self):
-        """Round 2 results: guess does not pass check."""
+    def test_n07_round_2(self):
+        """Round 2 results."""
         # Pre-call input to WordHints().update_word()
         updates = [UserFeedback('least', 'g    ')]  # loopy
         exp_results = 1  # Expected results
         self.run_test_pass(updates=updates, exp_results=exp_results)
 
-    def test_n08_round_3_false(self):
-        """Round 3 results: guess does not pass check."""
+    def test_n08_round_3(self):
+        """Round 3 results."""
         # Pre-call input to WordHints().update_word()
         updates = [UserFeedback('beast', '     '), UserFeedback('adieu', '     ')]  # loopy
         exp_results = 0  # Expected results
         self.run_test_pass(updates=updates, exp_results=exp_results)
 
-    def test_n09_round_4_false(self):
-        """Round 4 results: guess does not pass check."""
+    def test_n09_round_4(self):
+        """Round 4 results."""
         # Pre-call input to WordHints().update_word()
-        updates = [UserFeedback('zzzzz', '     '), UserFeedback('lousy', 'ggy g'),
+        updates = [UserFeedback('zzzzz', '     '), UserFeedback('lousy', 'gg  g'),
                    UserFeedback('louds', 'gg   ')]  # loopy
-        exp_results = 4  # Expected results
+        exp_results = 3  # Expected results
         self.run_test_pass(updates=updates, exp_results=exp_results)
 
-    def test_n10_round_5_false(self):
-        """Round 5 results: guess does not pass check."""
+    def test_n10_round_5(self):
+        """Round 5 results."""
         # Pre-call input to WordHints().update_word()
         updates = [UserFeedback('vwxyz', '   y '), UserFeedback('qrstu', '     '),
                    UserFeedback('beast', '     '), UserFeedback('below', '  yy ')]  # loopy
         exp_results = 3  # Expected results
         self.run_test_pass(updates=updates, exp_results=exp_results)
 
-    def test_n11_round_6_false(self):
-        """Round 6 results: guess does not pass check."""
+    def test_n11_round_6(self):
+        """Round 6 results."""
         # Pre-call input to WordHints().update_word()
         updates = [UserFeedback('vwxyz', '   y '), UserFeedback('qrstu', '     '),
                    UserFeedback('beast', '     '), UserFeedback('below', '  yy '),
