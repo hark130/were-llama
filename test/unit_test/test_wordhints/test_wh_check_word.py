@@ -188,7 +188,7 @@ class ErrorTestWordHintsCheckWord(TestWordHintsCheckWord):
         guess_input = None   # Test case input
         exp_err = TypeError  # Expected exception type
         # Expected exception message substring
-        exp_msg = 'must be a string'
+        exp_msg = 'must be of type'
         self.run_test_fail(updates=updates, guess_input=guess_input, err_type=exp_err,
                            err_msg=exp_msg)
 
@@ -198,7 +198,7 @@ class ErrorTestWordHintsCheckWord(TestWordHintsCheckWord):
         guess_input = b'beans'  # Test case input
         exp_err = TypeError     # Expected exception type
         # Expected exception message substring
-        exp_msg = 'must be a string'
+        exp_msg = 'must be of type'
         self.run_test_fail(updates=updates, guess_input=guess_input, err_type=exp_err,
                            err_msg=exp_msg)
 
