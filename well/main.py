@@ -8,6 +8,7 @@ from well.archive import get_past_answers
 from well.globals import FIVE_LETTER_WORDS, INPUT_GREEN
 from well.parse_args import use_archive
 from well.prompt import get_feedback
+from well.strategy import determine_dupe_weight
 from well.word_hints import WordHints
 from well.words import calc_word_ordict, remove_word_hints, remove_words
 
@@ -23,6 +24,7 @@ def main() -> int:
     word_hints = WordHints()  # WordHints object
     temp_word = ''            # Word input from user
     temp_result = ''          # Results input from user
+    temp_weight = 1.0         # Duplicate weight
 
     # DO IT
     if use_archive():
@@ -36,7 +38,8 @@ def main() -> int:
     # 4. Interact
     while True:
         # A. Calculate probability of remaining words
-        ord_dict = calc_word_ordict(available_list, dupe_weight=1.0)
+        dupe_weight = determine_dupe_weight(word_hint=word_hints)
+        ord_dict = calc_word_ordict(available_list, dupe_weight=dupe_weight)
         if not ord_dict:
             print('Something has gone wrong.  There are no more available guesses.\n'
                   'Perhaps a typo (or a BUG).')
