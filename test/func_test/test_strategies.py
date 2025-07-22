@@ -352,6 +352,41 @@ class NormalTestStrategies(TestStrategies):
         self.run_test(source=source)
 
 
+    def test_n20_start_weight_46_percent(self):
+        """Start weight value is 46%."""
+        source = FIVE_LETTER_WORDS                # Starting list of 5-letter words
+        self.set_start_weight(start_weight=0.46)  # determine_dupe_weight(start_weight)
+        self.run_test(source=source)
+
+
+    def test_n21_start_weight_47_percent(self):
+        """Start weight value is 47%."""
+        source = FIVE_LETTER_WORDS                # Starting list of 5-letter words
+        self.set_start_weight(start_weight=0.47)  # determine_dupe_weight(start_weight)
+        self.run_test(source=source)
+
+
+    def test_n22_start_weight_48_percent(self):
+        """Start weight value is 48%."""
+        source = FIVE_LETTER_WORDS                # Starting list of 5-letter words
+        self.set_start_weight(start_weight=0.48)  # determine_dupe_weight(start_weight)
+        self.run_test(source=source)
+
+
+    def test_n23_start_weight_49_percent(self):
+        """Start weight value is 49%."""
+        source = FIVE_LETTER_WORDS                # Starting list of 5-letter words
+        self.set_start_weight(start_weight=0.49)  # determine_dupe_weight(start_weight)
+        self.run_test(source=source)
+
+
+    def test_n24_start_weight_45_5_percent(self):
+        """Start weight value is 45.5%."""
+        source = FIVE_LETTER_WORDS                 # Starting list of 5-letter words
+        self.set_start_weight(start_weight=0.455)  # determine_dupe_weight(start_weight)
+        self.run_test(source=source)
+
+
 class ErrorTestStrategies(TestStrategies):
     """Error Test Cases."""
 
