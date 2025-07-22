@@ -7,53 +7,65 @@ from typing import OrderedDict as TypingOrderedDict  # TypeError: 'type' object 
 # Third Party Imports
 # Local Imports
 from well.globals import REL_START_FREQ, REL_WORD_FREQ
+from well.validation import validate_percent, validate_word
 from well.word_hints import WordHints
 
 
-class CountError(ValueError):
-    """A custom except indicating a count violation in a word."""
+def calc_word(word: str, dupe_weight: float = 1.0) -> int:
+    """Calculate the likelihood of a word based on frequency.
 
-
-def calc_word(word: str, unique: bool = False) -> int:
-    """Calculate the likelihood of a word based on frequency."""
+    Args:
+        words: A list of five letter words to calculate likelihoods for.
+        dupe_weight: Optional; Weight to apply to words with duplicate letters.  Acceptable ranges
+            are 0.0 to 1.0.  1.0 essentially disables this feature.  0.0 essentially skips
+            words that contain duplicate letters.
+    """
     # LOCAL VARIABLES
     prob = REL_START_FREQ[word[0].lower()]  # Calculated value
+
+    # INPUT VALIDATION
+    validate_word(word=word, name='word')  # Length will be validated below
+    validate_percent(percent=dupe_weight, name='dupe_weight')
 
     # CALC IT
     for letter in word:
         prob += REL_WORD_FREQ[letter.lower()]
-    if unique is True and _is_unique_word(word) is False:
-        raise CountError(f'"{word}" is not unique')
+    if not _is_unique_word(word):
+        prob *= dupe_weight
 
     # DONE
     return prob
 
 
-def calc_word_list(words: List[str], unique: bool = False) -> Dict[str, int]:
-    """Calculate likelihood for a list of words based on frequency."""
+def calc_word_list(words: List[str], dupe_weight: float = 1.0) -> Dict[str, int]:
+    """Calculate likelihood for a list of words based on frequency.
+
+    Args:
+        words: A list of five letter words to calculate likelihoods for.
+        dupe_weight: Optional; Weight to apply to words with duplicate letters.  Acceptable ranges
+            are 0.0 to 1.0.  1.0 essentially disables this feature.
+    """
     # LOCAL VARIABLES
     prob_dict = {}  # Dictionary of likelihood
 
     # CALC THEM
     for word in words:
-        try:
-            prob_dict[word.lower()] = calc_word(word, unique)
-        except CountError:
-            pass  # Skip it
+        prob_dict[word.lower()] = calc_word(word, dupe_weight)
 
     # DONE
     return prob_dict
 
 
-def calc_word_ordict(words: List[str], unique: bool = False) -> TypingOrderedDict[str, int]:
+def calc_word_ordict(words: List[str], dupe_weight: float = 1.0) -> TypingOrderedDict[str, int]:
     """Calculate likelihood for a list of words into a dict sort by descending probability.
 
     Args:
         words: A list of five letter words to calculate likelihoods for.
-        unique: Optional; If True, will only include words that are comprised of unique letters.
+        dupe_weight: Optional; Weight to apply to words with duplicate letters.  Acceptable ranges
+            are 0.0 to 1.0.  1.0 essentially disables this feature.
     """
     # LOCAL VARIABLES
-    prob_dict = calc_word_list(words, unique)
+    prob_dict = calc_word_list(words, dupe_weight)
     ord_dict = OrderedDict(dict(sorted(prob_dict.items(), key=lambda item: item[1], reverse=True)))
 
     # DONE

@@ -153,7 +153,7 @@ class NormalTestWordHintsCheckWord(TestWordHintsCheckWord):
     def test_n09_round_4_false(self):
         """Round 4 results: guess does not pass check."""
         # Pre-call input to WordHints().update_word()
-        updates = [UserFeedback('zzzzz', '     '), UserFeedback('lousy', 'ggy g'),
+        updates = [UserFeedback('zzzzz', '     '), UserFeedback('lousy', 'gg  g'),
                    UserFeedback('louds', 'gg   ')]  # loopy
         guess_input = 'loops'  # Test case input
         exp_results = False    # Expected results
@@ -188,7 +188,7 @@ class ErrorTestWordHintsCheckWord(TestWordHintsCheckWord):
         guess_input = None   # Test case input
         exp_err = TypeError  # Expected exception type
         # Expected exception message substring
-        exp_msg = 'must be a string'
+        exp_msg = 'must be of type'
         self.run_test_fail(updates=updates, guess_input=guess_input, err_type=exp_err,
                            err_msg=exp_msg)
 
@@ -198,7 +198,7 @@ class ErrorTestWordHintsCheckWord(TestWordHintsCheckWord):
         guess_input = b'beans'  # Test case input
         exp_err = TypeError     # Expected exception type
         # Expected exception message substring
-        exp_msg = 'must be a string'
+        exp_msg = 'must be of type'
         self.run_test_fail(updates=updates, guess_input=guess_input, err_type=exp_err,
                            err_msg=exp_msg)
 
@@ -289,6 +289,15 @@ class SpecialTestWordHintsCheckWord(TestWordHintsCheckWord):
         updates = [UserFeedback('stein', '   g '), UserFeedback('radio', 'ggyg ')]  # ?????
         guess_input = 'rapid'  # Test case input
         exp_results = True     # Expected results
+        self.run_test_pass(updates=updates, guess_input=guess_input, exp_results=exp_results)
+
+    def test_s05_the_user_is_wrong(self):
+        """Good, bad, or indifferent... proof that check_word() doesn't validate history."""
+        # Pre-call input to WordHints().update_word()
+        updates = [UserFeedback('zzzzz', '     '), UserFeedback('lousy', 'ggy g'),
+                   UserFeedback('louds', 'gg   ')]  # 'u' exists for lousy but not louds?!
+        guess_input = 'loops'  # Test case input
+        exp_results = False    # Expected results
         self.run_test_pass(updates=updates, guess_input=guess_input, exp_results=exp_results)
 
 

@@ -8,8 +8,9 @@ from well.archive import get_past_answers
 from well.globals import FIVE_LETTER_WORDS, INPUT_GREEN
 from well.parse_args import use_archive
 from well.prompt import get_feedback
+from well.strategy import determine_dupe_weight
 from well.word_hints import WordHints
-from well.words import calc_word_ordict, CountError, remove_word_hints, remove_words
+from well.words import calc_word_ordict, remove_word_hints, remove_words
 
 
 def main() -> int:
@@ -19,7 +20,6 @@ def main() -> int:
     archive_list = []         # List of previous Wordle answers
     available_list = []       # List of available words
     ord_dict = OrderedDict()  # OrderedDict of word probabilities
-    unique = False            # EDIT: Disabling "first true unique" strategy
     word_hints = WordHints()  # WordHints object
     temp_word = ''            # Word input from user
     temp_result = ''          # Results input from user
@@ -36,13 +36,13 @@ def main() -> int:
     # 4. Interact
     while True:
         # A. Calculate probability of remaining words
-        ord_dict = calc_word_ordict(available_list, unique=unique)
+        dupe_weight = determine_dupe_weight(word_hint=word_hints)
+        ord_dict = calc_word_ordict(available_list, dupe_weight=dupe_weight)
         if not ord_dict:
             print('Something has gone wrong.  There are no more available guesses.\n'
                   'Perhaps a typo (or a BUG).')
             result = 1
             break  # No more guesses, so no need to continue
-        unique = False
         print(f'TOP GUESSES ({len(ord_dict)} remaining): {", ".join(list(ord_dict.keys())[:10])}')
         try:
             # B. Take feedback
@@ -53,7 +53,7 @@ def main() -> int:
             word_hints.update_word(temp_word, temp_result)
             # C. Remove invalid words
             available_list = remove_word_hints(available_list, word_hints)
-        except (CountError, RuntimeError) as err:
+        except RuntimeError as err:
             print(f'Error encountered: {repr(err)}')
             print('Exiting.\n')
             result = 1

@@ -6,6 +6,7 @@ from enum import IntEnum
 # Local Imports
 from well.globals import INPUT_GREEN, INPUT_SKIP, INPUT_YELLOW
 from well.letter_hints import LetterHints
+from well.validation import validate_word
 
 
 class LetterIndex(IntEnum):
@@ -61,6 +62,20 @@ class WordHints():
 
         # DONE
         return valid
+
+    def count_known(self) -> int:
+        """Count the number of known letters (solved + must_haves)."""
+        # LOCAL VARIABLES
+        count = 0  # Running count
+
+        # COUNT IT
+        for letter_hint in self.word:
+            if letter_hint.is_solved():
+                count += 1
+        count += len(self._must_haves)
+
+        # DONE
+        return count
 
     def exclude_letter(self, letter: str, skip: LetterIndex = None) -> None:
         """Add an excluded letter to all letters except the skip index.
@@ -169,9 +184,6 @@ class WordHints():
             TypeError: Bad type.
             ValueError: Non-lowercase word, or bad string length.
         """
-        if not isinstance(five_letters, str):
-            raise TypeError(f'"{param_name}" must be a string instead of a {type(five_letters)}')
-        if 5 != len(five_letters):
-            raise ValueError(f'"{param_name}" is not five characters long!')
+        validate_word(word=five_letters, name=param_name)
         if five_letters.lower() != five_letters:
             raise ValueError(f'"{param_name}" must be all lower case: {five_letters}')
