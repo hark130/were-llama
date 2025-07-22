@@ -15,7 +15,6 @@ NormalTestStrategies.test_n04_start_weight_10_percent    # Run this n04
 from collections import OrderedDict
 from copy import deepcopy
 from dataclasses import dataclass
-from enum import auto, IntEnum
 from typing import List
 from unittest import skip
 import os
@@ -144,7 +143,6 @@ TEST STOP:  {test_stop}
         tmp_ord_dict = OrderedDict()           # Temp OrderedDict from calc_word_ordict()
         tmp_guess = ''                         # Top guess from temp_ord_dict
         tmp_result = ''                        # Mocked user feedback results
-        unique = True                          # calc_word_ordict() argument
         start_weight = self.test_start_weight  # The start_weight value for this test case
         dupe_weight = start_weight             # The current dupe_weight value for this test case
 
@@ -215,8 +213,7 @@ TEST STOP:  {test_stop}
             total_rem_words_1 += temp_stats.rem_words_1
             if temp_stats.error:
                 total_errors += 1
-                error_list.append(f'Strategy {strategy} encountered an error for '
-                                  f'Wordle "{word_input}"')
+                error_list.append(f'Encountered an error for Wordle "{word_input}"')
 
         # 3. Log the results/stats
         self.log_stats(TotalTestStats(total_inputs=len(source),
@@ -227,29 +224,31 @@ TEST STOP:  {test_stop}
                        errors=error_list)
 
 
+# pylint: disable=too-many-public-methods
+# They're test cases!  Calm down!
 class NormalTestStrategies(TestStrategies):
     """Normal Test Cases."""
 
     @skip('This test was broken on WELL-4 during a refactor')
     def test_n01_unique_false(self):
         """calc_word_ordict(unique=False)."""
-        strategy = TestStrategy.UNIQUE_FALSE  # calc_word_ordict(unique=False)
-        source = FIVE_LETTER_WORDS            # Starting list of 5-letter words
-        self.run_test(strategy=strategy, source=source)
+        # strategy = TestStrategy.UNIQUE_FALSE  # calc_word_ordict(unique=False)
+        # source = FIVE_LETTER_WORDS            # Starting list of 5-letter words
+        # self.run_test(strategy=strategy, source=source)
 
     @skip('This test was broken on WELL-4 during a refactor')
     def test_n02_unique_first(self):
         """calc_word_ordict(unique=True) on Round 1 only."""
-        strategy = TestStrategy.UNIQUE_FIRST  # calc_word_ordict(unique=True) on Round 1 only
-        source = FIVE_LETTER_WORDS            # Starting list of 5-letter words
-        self.run_test(strategy=strategy, source=source)
+        # strategy = TestStrategy.UNIQUE_FIRST  # calc_word_ordict(unique=True) on Round 1 only
+        # source = FIVE_LETTER_WORDS            # Starting list of 5-letter words
+        # self.run_test(strategy=strategy, source=source)
 
     @skip('This test is causing a plethora of errors... which is fine because it is not viable')
     def test_n03_unique_true(self):
         """calc_word_ordict(unique=True)."""
-        strategy = TestStrategy.UNIQUE_TRUE  # calc_word_ordict(unique=True)
-        source = FIVE_LETTER_WORDS           # Starting list of 5-letter words
-        self.run_test(strategy=strategy, source=source)
+        # strategy = TestStrategy.UNIQUE_TRUE  # calc_word_ordict(unique=True)
+        # source = FIVE_LETTER_WORDS           # Starting list of 5-letter words
+        # self.run_test(strategy=strategy, source=source)
 
     def test_n04_start_weight_10_percent(self):
         """Start weight value is 10%."""
@@ -323,13 +322,11 @@ class NormalTestStrategies(TestStrategies):
         self.set_start_weight(start_weight=0.55)  # determine_dupe_weight(start_weight)
         self.run_test(source=source)
 
-
     def test_n16_start_weight_41_percent(self):
         """Start weight value is 41%."""
         source = FIVE_LETTER_WORDS                # Starting list of 5-letter words
         self.set_start_weight(start_weight=0.55)  # determine_dupe_weight(start_weight)
         self.run_test(source=source)
-
 
     def test_n17_start_weight_42_percent(self):
         """Start weight value is 42%."""
@@ -337,13 +334,11 @@ class NormalTestStrategies(TestStrategies):
         self.set_start_weight(start_weight=0.55)  # determine_dupe_weight(start_weight)
         self.run_test(source=source)
 
-
     def test_n18_start_weight_43_percent(self):
         """Start weight value is 43%."""
         source = FIVE_LETTER_WORDS                # Starting list of 5-letter words
         self.set_start_weight(start_weight=0.55)  # determine_dupe_weight(start_weight)
         self.run_test(source=source)
-
 
     def test_n19_start_weight_44_percent(self):
         """Start weight value is 44%."""
@@ -351,13 +346,11 @@ class NormalTestStrategies(TestStrategies):
         self.set_start_weight(start_weight=0.55)  # determine_dupe_weight(start_weight)
         self.run_test(source=source)
 
-
     def test_n20_start_weight_46_percent(self):
         """Start weight value is 46%."""
         source = FIVE_LETTER_WORDS                # Starting list of 5-letter words
         self.set_start_weight(start_weight=0.46)  # determine_dupe_weight(start_weight)
         self.run_test(source=source)
-
 
     def test_n21_start_weight_47_percent(self):
         """Start weight value is 47%."""
@@ -365,13 +358,11 @@ class NormalTestStrategies(TestStrategies):
         self.set_start_weight(start_weight=0.47)  # determine_dupe_weight(start_weight)
         self.run_test(source=source)
 
-
     def test_n22_start_weight_48_percent(self):
         """Start weight value is 48%."""
         source = FIVE_LETTER_WORDS                # Starting list of 5-letter words
         self.set_start_weight(start_weight=0.48)  # determine_dupe_weight(start_weight)
         self.run_test(source=source)
-
 
     def test_n23_start_weight_49_percent(self):
         """Start weight value is 49%."""
@@ -379,11 +370,16 @@ class NormalTestStrategies(TestStrategies):
         self.set_start_weight(start_weight=0.49)  # determine_dupe_weight(start_weight)
         self.run_test(source=source)
 
-
     def test_n24_start_weight_45_5_percent(self):
         """Start weight value is 45.5%."""
         source = FIVE_LETTER_WORDS                 # Starting list of 5-letter words
         self.set_start_weight(start_weight=0.455)  # determine_dupe_weight(start_weight)
+        self.run_test(source=source)
+
+    def test_n25_start_weight_0_percent(self):
+        """Start weight value is 0%."""
+        source = FIVE_LETTER_WORDS               # Starting list of 5-letter words
+        self.set_start_weight(start_weight=0.0)  # determine_dupe_weight(start_weight)
         self.run_test(source=source)
 
 
@@ -401,9 +397,9 @@ class SpecialTestStrategies(TestStrategies):
     @skip('This test was broken on WELL-4 during a refactor')
     def test_s01_unique_first_errors(self):
         """Strategy errors from test_n02_unique_first()."""
-        strategy = TestStrategy.UNIQUE_FIRST           # calc_word_ordict(unique=True) on Rnd 1 only
-        source = ['emery', 'erect', 'every', 'exert']  # Starting list of 5-letter words
-        self.run_test(strategy=strategy, source=source)
+        # strategy = TestStrategy.UNIQUE_FIRST           # calc_word_ordict(unique=True) on R1 only
+        # source = ['emery', 'erect', 'every', 'exert']  # Starting list of 5-letter words
+        # self.run_test(strategy=strategy, source=source)
 
 
 if __name__ == '__main__':
