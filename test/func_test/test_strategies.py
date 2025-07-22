@@ -160,8 +160,8 @@ TEST STOP:  {test_stop}
                 dupe_weight = determine_dupe_weight(word_hint=word_hints, start_weight=start_weight)
                 tmp_ord_dict = calc_word_ordict(available_list, dupe_weight=dupe_weight)
                 if tmp_ord_dict:
-                    if 1 == round_num:
-                        rem_words_1 = len(tmp_ord_dict)  # Store it ASAP
+                    if 2 == round_num:
+                        rem_words_1 = len(tmp_ord_dict)  # Store it ASAP, before the "feedback"
                     tmp_guess = list(tmp_ord_dict.keys())[0]
                     tmp_result = get_mocked_feedback(tmp_guess, wordle)
                     num_guesses += 1
