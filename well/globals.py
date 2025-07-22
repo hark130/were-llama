@@ -21,7 +21,7 @@ INPUT_SKIP: Final[str] = ' '.lower()
 INPUT_SKIP_TITLE: Final[str] = '<SPACE>'.upper()
 
 # STRATEGY MACROS
-DEF_START_WEIGHT: Final[float] = .75  # Default starting weight for words w/ duplicate letters
+DEF_START_WEIGHT: Final[float] = 0.455  # Default starting weight for words w/ duplicate letters
 
 # WORD MACROS
 # Relative frequencies of the first letters of a word in English language
