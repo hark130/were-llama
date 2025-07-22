@@ -39,7 +39,7 @@ def determine_dupe_weight(word_hint: WordHints, start_weight: float = DEF_START_
 
     # DETERMINE IT
     num_known = word_hint.count_known()
-    if num_known < 4 and num_known >= 0:
+    if 0 <= num_known < 4:
         result = round(start_weight + ((1.0 - start_weight) * num_known / 4), 3)
     elif num_known in (4, 5):
         result = 1.0

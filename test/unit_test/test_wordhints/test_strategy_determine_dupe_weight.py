@@ -18,7 +18,6 @@ from tediousstart.tediousstart import execute_test_cases
 # Local Imports
 from well.letter_hints import LetterHints
 from well.strategy import determine_dupe_weight
-from well.word_hints import WordHints
 
 
 # Linked word updates and results as-if read from user input

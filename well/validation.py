@@ -59,6 +59,7 @@ def validate_type(var: Any, name: str, var_type: type) -> None:
     if not isinstance(var, var_type):
         raise TypeError(invalid.format(name=name, var_type=var_type, wrong_type=type(var)))
 
+
 def validate_word(word: str, name: str) -> None:
     """Validate word as a five character string.
 

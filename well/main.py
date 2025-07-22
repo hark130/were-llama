@@ -20,11 +20,9 @@ def main() -> int:
     archive_list = []         # List of previous Wordle answers
     available_list = []       # List of available words
     ord_dict = OrderedDict()  # OrderedDict of word probabilities
-    unique = False            # EDIT: Disabling "first true unique" strategy
     word_hints = WordHints()  # WordHints object
     temp_word = ''            # Word input from user
     temp_result = ''          # Results input from user
-    temp_weight = 1.0         # Duplicate weight
 
     # DO IT
     if use_archive():
@@ -45,7 +43,6 @@ def main() -> int:
                   'Perhaps a typo (or a BUG).')
             result = 1
             break  # No more guesses, so no need to continue
-        unique = False
         print(f'TOP GUESSES ({len(ord_dict)} remaining): {", ".join(list(ord_dict.keys())[:10])}')
         try:
             # B. Take feedback
